@@ -9,6 +9,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
             },
+            content: {
+                type: DataTypes.STRING,
+                allowNull: false,
+            },
         },
         { freezeTableName: true }
     );
