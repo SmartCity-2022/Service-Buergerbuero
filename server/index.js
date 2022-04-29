@@ -1,6 +1,10 @@
-const express = require('express');
-const app = express();
+const express = require("express");
 
-app.listen(3001, () => {
-    console.log("server running");
-})
+const app = express();
+const db = require("./models");
+
+db.sequelize.sync().then(() => {
+    app.listen(3001, () => {
+        console.log("server running");
+    });
+});
