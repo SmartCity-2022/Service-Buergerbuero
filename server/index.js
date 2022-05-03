@@ -1,3 +1,4 @@
+const { create_mockdata } = require("./mockdata");
 const express = require("express");
 const cors = require("cors");
 
@@ -11,7 +12,8 @@ app.use(cors());
 const testRouter = require("./routes/test");
 app.use("/test", testRouter);
 
-db.sequelize.sync().then(() => {
+db.sequelize.sync({ force: true }).then(async () => {
+    await create_mockdata(10);
     app.listen(3001, () => {
         console.log("server running");
     });

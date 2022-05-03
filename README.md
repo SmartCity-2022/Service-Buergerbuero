@@ -7,7 +7,7 @@ Microservice Buergerbuero
 ### server
 
 npm init  
-npm install express cors mysql2 nodemon sequelize -g sequelize-cli  
+npm install express cors mysql2 nodemon sequelize -g sequelize-cli faker
 sequelize init
 
 start with npm start
