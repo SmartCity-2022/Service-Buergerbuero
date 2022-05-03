@@ -9,11 +9,14 @@ app.use(express.json());
 app.use(cors());
 
 // rounters
-const testRouter = require("./routes/test");
-app.use("/test", testRouter);
+const feedback_router = require("./routes/feedback");
+app.use("/feedback", feedback_router);
 
-db.sequelize.sync({ force: true }).then(async () => {
-    await create_mockdata(10);
+const rebuild = false;
+db.sequelize.sync({ force: rebuild }).then(async () => {
+    if (rebuild) {
+        await create_mockdata(10);
+    }
     app.listen(3001, () => {
         console.log("server running");
     });
