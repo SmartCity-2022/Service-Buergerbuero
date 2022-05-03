@@ -1,3 +1,8 @@
+// settings
+const rebuild = false;
+const port = 3001;
+//
+
 const { create_mockdata } = require("./mockdata");
 const express = require("express");
 const cors = require("cors");
@@ -16,12 +21,11 @@ app.use("/lost_property", lost_property_router);
 const citizen_router = require("./routes/citizen");
 app.use("/citizen", citizen_router);
 
-const rebuild = false;
 db.sequelize.sync({ force: rebuild }).then(async () => {
     if (rebuild) {
         await create_mockdata(10);
     }
-    app.listen(3001, () => {
-        console.log("server running");
+    app.listen(port, () => {
+        console.log(`\nserver running on port: ${port}\n\n`);
     });
 });
