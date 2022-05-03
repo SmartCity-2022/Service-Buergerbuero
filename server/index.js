@@ -13,6 +13,8 @@ const feedback_router = require("./routes/feedback");
 app.use("/feedback", feedback_router);
 const lost_property_router = require("./routes/lost_property");
 app.use("/lost_property", lost_property_router);
+const citizen_router = require("./routes/citizen");
+app.use("/citizen", citizen_router);
 
 const rebuild = false;
 db.sequelize.sync({ force: rebuild }).then(async () => {
