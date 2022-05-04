@@ -5,7 +5,7 @@ async function create_mockdata(n) {
     for (i = 0; i < n; i++) {
         await db.feedback.create({ content: faker.lorem.sentence() });
         await db.lost_property.create({
-            type: faker.lorem.slug(),
+            type: faker.lorem.word(),
             desc: faker.lorem.sentence(2),
         });
         fn = faker.name.firstName();
@@ -24,7 +24,7 @@ async function create_mockdata(n) {
         });
 
         await citizen.createRequest({
-            type: faker.lorem.slug(),
+            type: faker.lorem.word(),
             desc: faker.lorem.sentence(2),
         });
     }
