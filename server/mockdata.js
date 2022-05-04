@@ -4,10 +4,13 @@ const db = require("./models");
 async function create_mockdata(n) {
     for (i = 0; i < n; i++) {
         await db.feedback.create({ content: faker.lorem.sentence() });
+
         await db.lost_property.create({
+            found_on: faker.date.recent(),
             type: faker.lorem.word(),
             desc: faker.lorem.sentence(2),
         });
+
         fn = faker.name.firstName();
         ln = faker.name.lastName();
         citizen = await db.citizen.create({
