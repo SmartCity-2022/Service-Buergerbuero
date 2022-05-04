@@ -4,15 +4,15 @@ const db = require("../models");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
-    const { first_name, surname } = req.body;
+    const { first_name, last_name } = req.body;
     let citizenlist;
     if (id) {
         citizenlist = await db.citizen.findOne({
             where: { id: id },
         });
-    } else if (first_name && surname) {
+    } else if (first_name && last_name) {
         citizenlist = await db.citizen.findOne({
-            where: { first_name: first_name, surname: surname },
+            where: { first_name: first_name, last_name: last_name },
         });
     } else {
         citizenlist = await db.citizen.findAll();
