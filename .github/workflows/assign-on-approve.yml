@@ -1,0 +1,19 @@
+name: Assign on approve
+
+on:
+  pull_request_review:
+    types: 
+      - submitted
+    branches:
+      - master
+
+jobs:
+  approved:
+    if: github.event.review.state == 'approved'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto Assign Merger
+        uses: actions-ecosystem/action-add-assignees@v1.0.0
+        with:
+          github_token: ${{ secrets.github_token }}
+          assignees: Flamtky

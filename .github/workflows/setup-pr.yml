@@ -1,0 +1,30 @@
+name: Auto Assign Author / Request Review
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - opened
+      - reopened
+
+jobs:
+  add_assignees:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions-ecosystem/action-add-assignees@v1.0.0
+        with:
+          github_token: ${{ secrets.github_token }}
+          assignees: ${{ github.actor }}
+      - name: Auto Assign Author
+        uses: actions-ecosystem/action-add-assignees@v1.0.0
+        with:
+          github_token: ${{ secrets.github_token }}
+          assignees: ${{ github.actor }}
+      - name: Add Reviewer
+        uses: madrapps/add-reviewers@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          reviewers: HerrVergesslich
+          re-request-when-approved: true
+          re-request-when-changes-requested: true
