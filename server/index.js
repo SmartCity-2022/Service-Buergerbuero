@@ -1,6 +1,8 @@
+require("dotenv").config()
+
 // settings
-const rebuild = false;
-const port = 3001;
+var rebuild = (process.env.REBUILD === "true");
+const port = process.env.PORT;
 //
 
 const { create_mockdata } = require("./mockdata");
