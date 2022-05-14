@@ -1,7 +1,7 @@
-require("dotenv").config()
+require("dotenv").config();
 
 // settings
-var rebuild = (process.env.REBUILD === "true");
+var rebuild = process.env.REBUILD === "true";
 const port = process.env.PORT;
 //
 
