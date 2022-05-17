@@ -20,6 +20,7 @@ app.use("/feedback", require("./routes/feedback"));
 app.use("/lost_property", require("./routes/lost_property"));
 app.use("/citizen", require("./routes/citizen"));
 app.use("/appointment", require("./routes/appointment"));
+app.use("/request", require("./routes/request"));
 
 db.sequelize.sync({ force: rebuild }).then(async () => {
     if (rebuild) {
