@@ -16,12 +16,9 @@ app.use(express.json());
 app.use(cors());
 
 // rounters
-const feedback_router = require("./routes/feedback");
-app.use("/feedback", feedback_router);
-const lost_property_router = require("./routes/lost_property");
-app.use("/lost_property", lost_property_router);
-const citizen_router = require("./routes/citizen");
-app.use("/citizen", citizen_router);
+app.use("/feedback", require("./routes/feedback"));
+app.use("/lost_property", require("./routes/lost_property"));
+app.use("/citizen", require("./routes/citizen"));
 
 db.sequelize.sync({ force: rebuild }).then(async () => {
     if (rebuild) {
