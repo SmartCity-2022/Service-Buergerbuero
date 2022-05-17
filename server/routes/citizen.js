@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
+const rabbitmq = require("../rabbitmq");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
@@ -30,6 +31,11 @@ router.post("/", async (req, res) => {
     if (!citizen) {
         res.status(404).send("something went wrong");
     } else {
+        const conn = await rabbitmq.connect();
+        const channel = await conn.createChannel();
+        await channel.assertExchange("exchange", "topic", { durable: true });
+        channel.publish("exchange", "test.route", Buffer.from("msg"));
+        console.log("send: msg");
         res.status(201).json(citizen);
     }
 });

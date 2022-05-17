@@ -11,7 +11,6 @@ const cors = require("cors");
 
 const app = express();
 const db = require("./models");
-const { connection } = require("./rabbitmq");
 
 app.use(express.json());
 app.use(cors());

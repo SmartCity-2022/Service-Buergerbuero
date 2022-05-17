@@ -1,7 +1,14 @@
 const amqp = require("amqplib");
 
-const connection = amqp.connect("amqp://@localhost:5672", (error0) => {
-    if (error) throw error0;
-});
+const connection = amqp.connect(
+    "amqp://localhost:5672",
+    (error0, connecttion) => {
+        if (error0) throw error0;
+    }
+);
 
-module.exports.connection = connection;
+function connect() {
+    return connection;
+}
+
+module.exports = { connect };
