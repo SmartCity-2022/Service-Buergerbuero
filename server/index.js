@@ -11,6 +11,7 @@ const cors = require("cors");
 
 const app = express();
 const db = require("./models");
+const { connection } = require("./rabbitmq");
 
 app.use(express.json());
 app.use(cors());
@@ -25,6 +26,6 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
         await create_mockdata(10);
     }
     app.listen(port, () => {
-        console.log(`\nserver running on port: ${port}\n\n`);
+        console.log(`\nserver running on port: ${port}\n`);
     });
 });
