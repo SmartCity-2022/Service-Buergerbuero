@@ -5,11 +5,16 @@ const rabbitmq = require("../rabbitmq");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
+    const email = req.query.email;
     const { first_name, last_name } = req.body;
     let citizenlist;
     if (id) {
         citizenlist = await db.citizen.findOne({
             where: { id: id },
+        });
+    } else if (email) {
+        citizenlist = await db.citizen.findOne({
+            where: { email: email },
         });
     } else if (first_name && last_name) {
         citizenlist = await db.citizen.findOne({
@@ -40,6 +45,23 @@ router.post("/", async (req, res) => {
             Buffer.from(citizen.email)
         );
         res.status(201).json(citizen);
+    }
+});
+
+router.post("/verify/", async (req, res) => {
+    const { email } = req.body;
+    if (!email) {
+        res.status(404).send("something went wrong");
+    } else {
+        citizen = await db.citizen.findOne({
+            where: { email: email },
+        });
+        if (!citizen) {
+            res.status(202).json({ exists: false });
+        } else {
+            res.status(202).json({ exists: true });
+        }
+        status(200).json(citizen);
     }
 });
 
