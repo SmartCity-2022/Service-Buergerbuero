@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const db = require("../models");
 const rabbitmq = require("../rabbitmq");
+const { auth } = require("../middlewares/auth");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
@@ -65,7 +66,7 @@ router.post("/verify/", async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
+router.delete("/", auth, async (req, res) => {
     const id = req.query.id;
     const del = await db.citizen.destroy({ where: { id: id } });
     if (!del) {
