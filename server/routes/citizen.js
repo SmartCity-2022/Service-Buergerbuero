@@ -33,9 +33,12 @@ router.post("/", async (req, res) => {
     } else {
         const conn = await rabbitmq.connect();
         const channel = await conn.createChannel();
-        await channel.assertExchange("exchange", "topic", { durable: true });
-        channel.publish("exchange", "test.route", Buffer.from("msg"));
-        console.log("send: msg");
+        await channel.assertExchange("exchange", "topic", { durable: false });
+        channel.publish(
+            "exchange",
+            "service.buergerbuero.citizen_created",
+            Buffer.from(citizen.email)
+        );
         res.status(201).json(citizen);
     }
 });
