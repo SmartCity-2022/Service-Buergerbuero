@@ -6,7 +6,7 @@ router.get("/", async (req, res) => {
     const id = req.query.id;
     let appointments;
     if (id) {
-        citizenlist = await db.appointment.findOne({
+        appointments = await db.appointment.findOne({
             where: { id: id },
         });
     } else {
