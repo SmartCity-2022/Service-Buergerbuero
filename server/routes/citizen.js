@@ -37,14 +37,21 @@ router.post("/", async (req, res) => {
     if (!citizen) {
         res.status(404).send("something went wrong");
     } else {
-        const conn = await rabbitmq.connect();
-        const channel = await conn.createChannel();
-        await channel.assertExchange("exchange", "topic", { durable: false });
-        channel.publish(
-            "exchange",
-            "service.buergerbuero.citizen_created",
-            Buffer.from(JSON.stringify({ email: citizen.email }))
-        );
+        try {
+            const conn = await rabbitmq.connect();
+            const channel = await conn.createChannel();
+            await channel.assertExchange("exchange", "topic", {
+                durable: false,
+            });
+            channel.publish(
+                "exchange",
+                "service.buergerbuero.citizen_created",
+                Buffer.from(JSON.stringify({ email: citizen.email }))
+            );
+        } catch (error) {
+            throw error;
+        }
+
         res.status(201).json(citizen);
     }
 });

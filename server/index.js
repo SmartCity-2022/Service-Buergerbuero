@@ -30,23 +30,27 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
     app.listen(port, async () => {
         console.log(`\nserver running on port: ${port}\n`);
 
-        const con = await rabbitmq.connect();
-        const ch = await con.createChannel();
+        try {
+            const con = await rabbitmq.connect();
+            const ch = await con.createChannel();
 
-        const queue = await ch.assertQueue("citizenQueue", {
-            durable: true,
-            exclusive: true,
-        });
-        ch.bindQueue(
-            queue.queue,
-            "exchange",
-            "service.buergerbuero.citizen_created"
-        );
-        ch.consume(queue.queue, (msg) => {
-            string = msg.content.toString();
-            j = JSON.parse(string);
-            console.log(j);
-            ch.ack(msg);
-        });
+            const queue = await ch.assertQueue("citizenQueue", {
+                durable: true,
+                exclusive: true,
+            });
+            await ch.bindQueue(
+                queue.queue,
+                "exchange",
+                "service.buergerbuero.citizen_created"
+            );
+            await ch.consume(queue.queue, (msg) => {
+                string = msg.content.toString();
+                j = JSON.parse(string);
+                console.log(j);
+                ch.ack(msg);
+            });
+        } catch (error) {
+            throw error;
+        }
     });
 });
