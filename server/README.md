@@ -13,3 +13,5 @@ __DB_NAME__ database name
 __DB_HOST__ database host, i.e. "127.0.0.1"  
 
 __AMQPHOST__ rabbitmq host, i.e. "amqp://localhost:5672"  
+
+__RABBITMQEXCHANGE__ rabbitmq exchange name , i.e. "exchange"

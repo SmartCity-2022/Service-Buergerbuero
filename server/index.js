@@ -40,7 +40,7 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
             });
             await ch.bindQueue(
                 queue.queue,
-                "exchange",
+                process.env.RABBITMQEXCHANGE,
                 "service.buergerbuero.citizen_created"
             );
             await ch.consume(queue.queue, (msg) => {

@@ -3,6 +3,7 @@ const router = express.Router();
 const db = require("../models");
 const rabbitmq = require("../rabbitmq");
 const { auth } = require("../middlewares/auth");
+require("dotenv").config();
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
@@ -40,11 +41,15 @@ router.post("/", async (req, res) => {
         try {
             const conn = await rabbitmq.connect();
             const channel = await conn.createChannel();
-            await channel.assertExchange("exchange", "topic", {
-                durable: false,
-            });
+            await channel.assertExchange(
+                process.env.RABBITMQEXCHANGE,
+                "topic",
+                {
+                    durable: false,
+                }
+            );
             channel.publish(
-                "exchange",
+                process.env.RABBITMQEXCHANGE,
                 "service.buergerbuero.citizen_created",
                 Buffer.from(JSON.stringify({ email: citizen.email }))
             );
@@ -69,7 +74,6 @@ router.post("/verify/", async (req, res) => {
         } else {
             res.status(202).json({ exists: true });
         }
-        status(200).json(citizen);
     }
 });
 
