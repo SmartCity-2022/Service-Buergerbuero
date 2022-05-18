@@ -45,7 +45,7 @@ router.post("/", async (req, res) => {
                 process.env.RABBITMQEXCHANGE,
                 "topic",
                 {
-                    durable: false,
+                    durable: true,
                 }
             );
             channel.publish(
