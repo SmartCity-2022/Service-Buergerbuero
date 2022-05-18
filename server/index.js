@@ -11,6 +11,7 @@ const cors = require("cors");
 
 const app = express();
 const db = require("./models");
+const rabbitmq = require("./rabbitmq");
 
 app.use(express.json());
 app.use(cors());
@@ -26,7 +27,26 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
     if (rebuild) {
         await create_mockdata(10);
     }
-    app.listen(port, () => {
+    app.listen(port, async () => {
         console.log(`\nserver running on port: ${port}\n`);
+
+        const con = await rabbitmq.connect();
+        const ch = await con.createChannel();
+
+        const queue = await ch.assertQueue("citizenQueue", {
+            durable: true,
+            exclusive: true,
+        });
+        ch.bindQueue(
+            queue.queue,
+            "exchange",
+            "service.buergerbuero.citizen_created"
+        );
+        ch.consume(queue.queue, (msg) => {
+            string = msg.content.toString();
+            j = JSON.parse(string);
+            console.log(j);
+            ch.ack(msg);
+        });
     });
 });

@@ -43,7 +43,7 @@ router.post("/", async (req, res) => {
         channel.publish(
             "exchange",
             "service.buergerbuero.citizen_created",
-            Buffer.from(citizen.email)
+            Buffer.from(JSON.stringify({ email: citizen.email }))
         );
         res.status(201).json(citizen);
     }
