@@ -1,3 +1,4 @@
+require("dotenv").config();
 const { verify_jwt } = require("./verify_jwt");
 const axios = require("axios");
 
@@ -17,7 +18,9 @@ const auth = async (req, res, next) => {
 
     if (expired) {
         await axios
-            .post("https://MAINHUB/api/token", { refreshToken: refresh_token })
+            .post(`${process.env.MAIN_HUB_HOST}/api/token`, {
+                refreshToken: refresh_token,
+            })
             .then((res) => {
                 const { accessToken } = res.body;
                 if (accessToken) {
