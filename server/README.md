@@ -18,4 +18,6 @@ __RABBITMQEXCHANGE__ rabbitmq exchange name , i.e. "exchange"
 
 __JWT_SECRET__ jwt secret  
 
-__MAIN_HUB_HOST__ host address of main hub server
+__MAIN_HUB_HOST__ host address of main hub server  
+
+__SKIP_AUTH__ set to true if to skip user authentication for testing/development purposes 

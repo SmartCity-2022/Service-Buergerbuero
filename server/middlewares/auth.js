@@ -3,6 +3,12 @@ const { verify_jwt } = require("./verify_jwt");
 const axios = require("axios");
 
 const auth = async (req, res, next) => {
+    // make it possible to skip actual auth for testing/development
+    var skip = process.env.SKIP_AUTH === "true";
+    if (skip) {
+        return next();
+    }
+
     const access_token = req.header("accessToken");
     const refresh_token = req.header("refreshToken");
 
