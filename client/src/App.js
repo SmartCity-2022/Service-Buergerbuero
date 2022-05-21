@@ -10,12 +10,20 @@ function App() {
         });
     }, []);
 
-    const on_click = () => {
+    const on_click = async () => {
+        //const mock = { accessToken: "a t lol", refreshToken: "r t xd" };
+        //localStorage.setItem("tokens", JSON.stringify(mock));
+        const { accessToken, refreshToken } = JSON.parse(
+            localStorage.getItem("tokens")
+        );
+        const auth_header = {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+        };
         axios
             .get("http://localhost:3001/test", {
                 headers: {
-                    Authorization:
-                        '{"access_token": "at", "refresh_token": "rt"}',
+                    Authorization: JSON.stringify(auth_header),
                 },
             })
             .then((res) => {
