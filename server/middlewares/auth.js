@@ -9,13 +9,17 @@ const auth = async (req, res, next) => {
         return next();
     }
 
-    const { access_token, refresh_token } = JSON.parse(
-        req.header("Authorization")
-    );
+    const auth_header = req.header("Authorization");
+    if (!auth_header) {
+        return res.status(401).send("missing Authorization header");
+    }
+
+    const { access_token, refresh_token } = JSON.parse(auth_header);
 
     if (!access_token || !refresh_token) {
         return res.status(401).send("missing token");
     }
+
     const { payload, expired } = verify_jwt(access_token);
 
     if (payload && !expired) {
@@ -36,7 +40,9 @@ const auth = async (req, res, next) => {
                     req.user = payload;
                     return next();
                 } else {
-                    return res.status(500).send("auth failed");
+                    return res
+                        .status(500)
+                        .send("failed to retrieve access token from main hub");
                 }
             });
     }

@@ -3,13 +3,36 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 
 function App() {
-    const [lost, set_lost] = useState([]);
+    const [citizen, set_citizen] = useState([]);
     useEffect(() => {
-        axios.get("http://localhost:3001/lost_property").then((res) => {
-            console.log();
-            set_lost(res.data);
+        axios.get("http://localhost:3001/citizen").then((res) => {
+            set_citizen(res.data);
         });
     }, []);
+
+    const on_click = async () => {
+        //const mock = { accessToken: "a t lol", refreshToken: "r t xd" };
+        //localStorage.setItem("tokens", JSON.stringify(mock));
+        const { accessToken, refreshToken } = JSON.parse(
+            localStorage.getItem("tokens")
+        );
+        const auth_header = {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+        };
+        axios
+            .get("http://localhost:3001/test", {
+                headers: {
+                    Authorization: JSON.stringify(auth_header),
+                },
+            })
+            .then((res) => {
+                console.log(res.data);
+            })
+            .catch((obj) => {
+                console.log(obj.response.data);
+            });
+    };
 
     return (
         <div className="App">
@@ -17,22 +40,23 @@ function App() {
             <table bgcolor="black" align="center">
                 <tbody>
                     <tr bgcolor="grey">
-                        <th width="400">Datum gefunden</th>
-                        <th width="400">Typ</th>
-                        <th width="400">Beschreibung</th>
+                        <th width="400">Vorname</th>
+                        <th width="400">Nachname</th>
+                        <th width="400">E-Mail</th>
                     </tr>
 
-                    {lost.map((value, key) => {
+                    {citizen.map((value, key) => {
                         return (
                             <tr key={key} bgcolor="lightgrey">
-                                <td>{value.found_on}</td>
-                                <td>{value.type}</td>
-                                <td>{value.desc}</td>
+                                <td>{value.first_name}</td>
+                                <td>{value.last_name}</td>
+                                <td>{value.email}</td>
                             </tr>
                         );
                     })}
                 </tbody>
             </table>
+            <button onClick={on_click}>test auth</button>
         </div>
     );
 }
