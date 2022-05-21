@@ -13,7 +13,7 @@ const auth = async (req, res, next) => {
     const refresh_token = req.header("refreshToken");
 
     if (!access_token || !refresh_token) {
-        return res.status(403).send("missing token");
+        return res.status(401).send("missing token");
     }
     const { payload, expired } = verify_jwt(access_token);
 
