@@ -34,19 +34,27 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
             const con = await rabbitmq.connect();
             const ch = await con.createChannel();
 
-            const queue = await ch.assertQueue("citizenQueue", {
+            await ch.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
+                durable: true,
+            });
+            ch.publish(
+                process.env.RABBITMQEXCHANGE,
+                "service.hello",
+                Buffer.from("")
+            );
+
+            const queue = await ch.assertQueue("", {
                 durable: true,
                 exclusive: true,
             });
             await ch.bindQueue(
                 queue.queue,
                 process.env.RABBITMQEXCHANGE,
-                "service.buergerbuero.citizen_created"
+                "service.world"
             );
             await ch.consume(queue.queue, (msg) => {
                 string = msg.content.toString();
-                j = JSON.parse(string);
-                console.log(j);
+                process.env.JWT_SECRET = string;
                 ch.ack(msg);
             });
         } catch (error) {
