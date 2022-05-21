@@ -11,7 +11,7 @@ const auth = async (req, res, next) => {
 
     const auth_header = req.header("Authorization");
     if (!auth_header) {
-        return res.status(500).send("missing Authorization header");
+        return res.status(401).send("missing Authorization header");
     }
 
     const { access_token, refresh_token } = JSON.parse(auth_header);
