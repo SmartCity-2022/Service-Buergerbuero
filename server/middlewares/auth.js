@@ -9,8 +9,9 @@ const auth = async (req, res, next) => {
         return next();
     }
 
-    const access_token = req.header("accessToken");
-    const refresh_token = req.header("refreshToken");
+    const { access_token, refresh_token } = JSON.parse(
+        req.header("Authorization")
+    );
 
     if (!access_token || !refresh_token) {
         return res.status(401).send("missing token");
