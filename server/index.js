@@ -22,6 +22,7 @@ app.use("/lost_property", require("./routes/lost_property"));
 app.use("/citizen", require("./routes/citizen"));
 app.use("/appointment", require("./routes/appointment"));
 app.use("/request", require("./routes/request"));
+app.use("/test", require("./routes/test"));
 
 db.sequelize.sync({ force: rebuild }).then(async () => {
     if (rebuild) {
@@ -37,11 +38,13 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
             await ch.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
                 durable: true,
             });
+
             ch.publish(
                 process.env.RABBITMQEXCHANGE,
                 "service.hello",
                 Buffer.from("")
             );
+            console.log("published service.hello");
 
             const queue = await ch.assertQueue("", {
                 durable: true,
@@ -56,6 +59,7 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
                 string = msg.content.toString();
                 process.env.JWT_SECRET = string;
                 ch.ack(msg);
+                console.log("consumed service.world");
             });
         } catch (error) {
             throw error;
