@@ -26,7 +26,7 @@ const auth = async (req, res, next) => {
     if (expired) {
         await axios
             .post(`${process.env.MAIN_HUB_HOST}/api/token`, {
-                refreshToken: refresh_token,
+                token: refresh_token,
             })
             .then((res) => {
                 const { accessToken } = res.body;
