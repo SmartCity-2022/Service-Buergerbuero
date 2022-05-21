@@ -40,9 +40,9 @@ function App() {
             <table bgcolor="black" align="center">
                 <tbody>
                     <tr bgcolor="grey">
-                        <th width="400">vorname</th>
-                        <th width="400">nachname</th>
-                        <th width="400">email</th>
+                        <th width="400">Vorname</th>
+                        <th width="400">Nachname</th>
+                        <th width="400">E-Mail</th>
                     </tr>
 
                     {citizen.map((value, key) => {
