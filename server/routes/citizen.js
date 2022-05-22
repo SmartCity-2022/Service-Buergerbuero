@@ -54,7 +54,7 @@ router.post("/", async (req, res) => {
                 Buffer.from(JSON.stringify({ email: citizen.email }))
             );
         } catch (error) {
-            throw error;
+            console.error(error);
         }
 
         res.status(201).json(citizen);
