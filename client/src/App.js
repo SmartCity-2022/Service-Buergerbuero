@@ -1,6 +1,7 @@
 import "./App.css";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 function App() {
     const [citizen, set_citizen] = useState([]);
@@ -11,14 +12,11 @@ function App() {
     }, []);
 
     const on_click = async () => {
-        //const mock = { accessToken: "a t lol", refreshToken: "r t xd" };
-        //localStorage.setItem("tokens", JSON.stringify(mock));
-        const { accessToken, refreshToken } = JSON.parse(
-            localStorage.getItem("tokens")
-        );
+        Cookies.set("accessToken", "ac");
+        Cookies.set("refreshToken", "rf");
         const auth_header = {
-            access_token: accessToken,
-            refresh_token: refreshToken,
+            access_token: Cookies.get("accessToken"),
+            refresh_token: Cookies.get("refreshToken"),
         };
         axios
             .get("http://localhost:3001/test", {
@@ -28,6 +26,18 @@ function App() {
             })
             .then((res) => {
                 console.log(res.data);
+            })
+            .catch((obj) => {
+                console.log(obj.response.data);
+            });
+    };
+
+    const on_click_mock = async () => {
+        axios
+            .get("http://localhost:3001/test/mock")
+            .then((res) => {
+                console.log(res.data);
+                window.location.reload(false);
             })
             .catch((obj) => {
                 console.log(obj.response.data);
@@ -57,6 +67,7 @@ function App() {
                 </tbody>
             </table>
             <button onClick={on_click}>test auth</button>
+            <button onClick={on_click_mock}>add mock data</button>
         </div>
     );
 }
