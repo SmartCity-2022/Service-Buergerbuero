@@ -62,7 +62,7 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
                 console.log("consumed service.world");
             });
         } catch (error) {
-            throw error;
+            console.error(error);
         }
     });
 });
