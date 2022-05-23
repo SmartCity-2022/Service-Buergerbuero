@@ -46,7 +46,7 @@ function App() {
 
     return (
         <div className="App">
-            <h1>Fundsachen</h1>
+            <h1>Bürger</h1>
             <table bgcolor="black" align="center">
                 <tbody>
                     <tr bgcolor="grey">
