@@ -8,6 +8,8 @@ RUN npm ci
 
 COPY ./ /app/
 
+ENV PUBLIC_URL=https://smartcity.w-mi.de/buergerbuero
+
 RUN npm run build
 
 ## Create NGINX deployment
