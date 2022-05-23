@@ -6,9 +6,11 @@ import Cookies from "js-cookie";
 function App() {
     const [citizen, set_citizen] = useState([]);
     useEffect(() => {
-        axios.get("http://localhost:3001/citizen").then((res) => {
-            set_citizen(res.data);
-        });
+        axios
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/citizen`)
+            .then((res) => {
+                set_citizen(res.data);
+            });
     }, []);
 
     const on_click = async () => {
@@ -19,7 +21,7 @@ function App() {
             refresh_token: Cookies.get("refreshToken"),
         };
         axios
-            .get("http://localhost:3001/test", {
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/test`, {
                 headers: {
                     Authorization: JSON.stringify(auth_header),
                 },
@@ -34,7 +36,7 @@ function App() {
 
     const on_click_mock = async () => {
         axios
-            .get("http://localhost:3001/test/mock")
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/test/mock`)
             .then((res) => {
                 console.log(res.data);
                 window.location.reload(false);
