@@ -39,16 +39,10 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
                 durable: true,
             });
 
-            ch.publish(
-                process.env.RABBITMQEXCHANGE,
-                "service.hello",
-                Buffer.from("")
-            );
-            console.log("published service.hello");
-
             const queue = await ch.assertQueue("", {
                 durable: true,
-                exclusive: true,
+                exclusive: false,
+                autoDelete: true,
             });
             await ch.bindQueue(
                 queue.queue,
@@ -61,6 +55,13 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
                 ch.ack(msg);
                 console.log("consumed service.world");
             });
+
+            ch.publish(
+                process.env.RABBITMQEXCHANGE,
+                "service.hello",
+                Buffer.from("buergerbuero")
+            );
+            console.log("published service.hello");
         } catch (error) {
             console.error(error);
         }
