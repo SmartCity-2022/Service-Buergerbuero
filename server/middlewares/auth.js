@@ -15,12 +15,16 @@ const auth = async (req, res, next) => {
     }
 
     const { access_token, refresh_token } = JSON.parse(auth_header);
+    console.log(`access token: ${access_token}`);
+    console.log(`refresh token: ${refresh_token}`);
 
     if (!access_token || !refresh_token) {
         return res.status(401).send("missing token");
     }
 
     const { payload, expired } = verify_jwt(access_token);
+    console.log(`payload: ${payload}`);
+    console.log(`expired: ${expired}`);
 
     if (payload && !expired) {
         req.user = payload;
