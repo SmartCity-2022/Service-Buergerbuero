@@ -14,8 +14,8 @@ function App() {
     }, []);
 
     const on_click = async () => {
-        Cookies.set("accessToken", "ac");
-        Cookies.set("refreshToken", "rf");
+        //Cookies.set("accessToken", "ac");
+        //Cookies.set("refreshToken", "rf");
         const auth_header = {
             access_token: Cookies.get("accessToken"),
             refresh_token: Cookies.get("refreshToken"),
@@ -56,7 +56,7 @@ function App() {
                         <th width="400">Nachname</th>
                         <th width="400">E-Mail</th>
                     </tr>
-                    {Array.isArray(citizen) ? (
+                    {Array.isArray(citizen) &&
                         citizen.map((value, key) => {
                             return (
                                 <tr key={key} bgcolor="lightgrey">
@@ -65,12 +65,7 @@ function App() {
                                     <td>{value.email}</td>
                                 </tr>
                             );
-                        })
-                    ) : (
-                        <>
-                            <h1>citizen ist kein array lol why</h1>
-                        </>
-                    )}
+                        })}
                 </tbody>
             </table>
             <button onClick={on_click}>test auth</button>
