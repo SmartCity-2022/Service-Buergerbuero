@@ -41,7 +41,8 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
 
             const queue = await ch.assertQueue("", {
                 durable: true,
-                exclusive: true,
+                exclusive: false,
+                autoDelete: true,
             });
             await ch.bindQueue(
                 queue.queue,
