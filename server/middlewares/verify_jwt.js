@@ -6,6 +6,7 @@ function verify_jwt(jwt) {
         const decoded = verify(jwt, process.env.JWT_SECRET);
         return { payload: decoded, expired: false };
     } catch (error) {
+        console.error(error);
         return {
             payload: null,
             expired: error.message.includes("jwt expired"),

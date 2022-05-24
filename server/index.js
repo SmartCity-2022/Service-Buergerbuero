@@ -52,6 +52,8 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
             await ch.consume(queue.queue, (msg) => {
                 string = msg.content.toString();
                 process.env.JWT_SECRET = string;
+                console.log(string);
+                console.log(process.env.JWT_SECRET);
                 ch.ack(msg);
                 console.log("consumed service.world");
             });
