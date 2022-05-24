@@ -14,8 +14,8 @@ function App() {
     }, []);
 
     const on_click = async () => {
-        Cookies.set("accessToken", "ac");
-        Cookies.set("refreshToken", "rf");
+        //Cookies.set("accessToken", "ac");
+        //Cookies.set("refreshToken", "rf");
         const auth_header = {
             access_token: Cookies.get("accessToken"),
             refresh_token: Cookies.get("refreshToken"),
