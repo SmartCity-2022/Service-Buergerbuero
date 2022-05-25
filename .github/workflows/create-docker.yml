@@ -15,7 +15,7 @@ env:
 
 jobs:
   build-back:
-    if: github.actor == 'Flamtky' || github.actor == 'Herrvergesslich'
+    if: github.actor == 'Flamtky' || github.actor == 'fwatermann'
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -63,7 +63,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
   build-front:
-    if: github.actor == 'Flamtky' || github.actor == 'Herrvergesslich'
+    if: github.actor == 'Flamtky' || github.actor == 'fwatermann'
     runs-on: ubuntu-latest
     permissions:
       contents: read
