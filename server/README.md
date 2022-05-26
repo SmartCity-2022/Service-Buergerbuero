@@ -14,10 +14,12 @@ __DB_HOST__ database host, i.e. "127.0.0.1"
 
 __AMQPHOST__ rabbitmq host, i.e. "amqp://localhost:5672"  
 
-__RABBITMQEXCHANGE__ rabbitmq exchange name , i.e. "exchange"  
+__RABBITMQEXCHANGE__ rabbitmq exchange name, i.e. "exchange"  
 
 __JWT_SECRET__ jwt secret  
 
 __MAIN_HUB_HOST__ host address of main hub server  
 
 __SKIP_AUTH__ set to true if to skip user authentication for testing/development purposes 
+
+__FRONTEND_HOST__ fontend host address for cors origin, i.e. "http://localhost:3000"
