@@ -46,8 +46,10 @@ const auth = async (req, res, next) => {
                         domain: ".smartcity.w-mi.de",
                     });
                     const { payload } = verify_jwt(accessToken);
-                    req.user = payload;
-                    return next();
+                    if (payload) {
+                        req.user = payload;
+                        return next();
+                    }
                 } else {
                     return res
                         .status(500)
