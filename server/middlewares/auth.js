@@ -1,6 +1,7 @@
 require("dotenv").config();
 const { verify_jwt } = require("./verify_jwt");
 const axios = require("axios");
+const cookie_parser = require("cookie-parser");
 
 const auth = async (req, res, next) => {
     // make it possible to skip actual auth for testing/development
@@ -9,12 +10,14 @@ const auth = async (req, res, next) => {
         return next();
     }
 
-    const auth_header = req.header("Authorization");
-    if (!auth_header) {
-        return res.status(401).send("missing Authorization header");
+    const { cookies } = req;
+    if (!cookies) {
+        return res.status(401).send("missing Authorization cookies");
     }
+    console.log(`auth recived cookies: ${cookies}`);
 
-    const { access_token, refresh_token } = JSON.parse(auth_header);
+    const access_token = cookies.accessToken;
+    const refresh_token = cookies.refreshtoken;
     console.log(`access token: ${access_token}`);
     console.log(`refresh token: ${refresh_token}`);
 
@@ -39,7 +42,9 @@ const auth = async (req, res, next) => {
             .then((res) => {
                 const { accessToken } = res.body;
                 if (accessToken) {
-                    req.new_access_token = accessToken;
+                    res.cookie("accessToken", accessToken, {
+                        domain: ".smartcity.w-mi.de",
+                    });
                     const { payload } = verify_jwt(access_token);
                     req.user = payload;
                     return next();
@@ -48,8 +53,12 @@ const auth = async (req, res, next) => {
                         .status(500)
                         .send("failed to retrieve access token from main hub");
                 }
+            })
+            .catch((err) => {
+                console.error(err);
             });
     }
+
     return res.status(500).send("auth failed");
 };
 
