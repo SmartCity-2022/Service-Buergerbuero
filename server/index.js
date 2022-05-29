@@ -8,13 +8,15 @@ const port = process.env.PORT;
 const { create_mockdata } = require("./mockdata");
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 const db = require("./models");
 const rabbitmq = require("./rabbitmq");
 
+app.use(cookieParser());
 app.use(express.json());
-app.use(cors());
+app.use(cors({ origin: process.env.FRONTEND_HOST || true, credentials: true }));
 
 // rounters
 app.use("/feedback", require("./routes/feedback"));
@@ -52,6 +54,8 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
             await ch.consume(queue.queue, (msg) => {
                 string = msg.content.toString();
                 process.env.JWT_SECRET = string;
+                console.log(`world string: ${string}`);
+                console.log(`check env var: ${process.env.JWT_SECRET}`);
                 ch.ack(msg);
                 console.log("consumed service.world");
             });

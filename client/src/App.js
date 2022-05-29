@@ -14,17 +14,9 @@ function App() {
     }, []);
 
     const on_click = async () => {
-        //Cookies.set("accessToken", "ac");
-        //Cookies.set("refreshToken", "rf");
-        const auth_header = {
-            access_token: Cookies.get("accessToken"),
-            refresh_token: Cookies.get("refreshToken"),
-        };
         axios
             .get(`${process.env.REACT_APP_BACKEND_HOST}/test`, {
-                headers: {
-                    Authorization: JSON.stringify(auth_header),
-                },
+                withCredentials: true,
             })
             .then((res) => {
                 console.log(res.data);
