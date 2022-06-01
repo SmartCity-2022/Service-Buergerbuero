@@ -15,9 +15,10 @@ import AdbIcon from "@mui/icons-material/Adb";
 import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
+import HomeIcon from "@mui/icons-material/Home";
 
 const pages = ["Home", "Error"];
-const settings = [];
+const settings = ["Termine"];
 
 const Nav = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -40,7 +41,7 @@ const Nav = () => {
 
     return (
         <AppBar position="static">
-            <Container maxWidth="xl">
+            <Container maxWidth="xxl">
                 <Toolbar disableGutters>
                     <img
                         src={logo}
@@ -61,7 +62,7 @@ const Nav = () => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        Bürgerbüro
                     </Typography>
 
                     <Box
@@ -134,7 +135,7 @@ const Nav = () => {
                             textDecoration: "none",
                         }}
                     >
-                        LOGO
+                        Bürgerbüro
                     </Typography>
                     <Box
                         sx={{
@@ -146,7 +147,12 @@ const Nav = () => {
                             <Button
                                 key={page}
                                 onClick={handleCloseNavMenu}
-                                sx={{ my: 2, color: "white", display: "block" }}
+                                sx={{
+                                    my: 2,
+                                    color: "white",
+                                    display: "block",
+                                    ":hover": { boxShadow: "1px -1px" },
+                                }}
                             >
                                 <Link
                                     style={{
@@ -162,13 +168,18 @@ const Nav = () => {
                     </Box>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
+                        <Tooltip title="Ich">
                             <IconButton
                                 onClick={handleOpenUserMenu}
                                 sx={{ p: 0 }}
                             >
-                                <Avatar sx={{ bgcolor: "#121212" }}>
-                                    <SettingsApplicationsIcon />
+                                <Avatar
+                                    sx={{
+                                        color: "primary.darker",
+                                        bgcolor: "neutral.contrastText",
+                                    }}
+                                >
+                                    <HomeIcon />
                                 </Avatar>
                             </IconButton>
                         </Tooltip>
@@ -194,7 +205,15 @@ const Nav = () => {
                                     onClick={handleCloseUserMenu}
                                 >
                                     <Typography textAlign="center">
-                                        {setting}
+                                        <Link
+                                            style={{
+                                                textDecoration: "none",
+                                                color: "black",
+                                            }}
+                                            to={`/${setting.toLowerCase()}`}
+                                        >
+                                            {setting}
+                                        </Link>
                                     </Typography>
                                 </MenuItem>
                             ))}
