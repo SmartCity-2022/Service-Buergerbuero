@@ -149,9 +149,12 @@ const Nav = () => {
                                 onClick={handleCloseNavMenu}
                                 sx={{
                                     my: 2,
+                                    mx: 1,
                                     color: "white",
                                     display: "block",
-                                    ":hover": { boxShadow: "1px -1px" },
+                                    border: 1,
+                                    borderColor: "primary.main",
+                                    ":hover": { borderColor: "white" },
                                 }}
                             >
                                 <Link
