@@ -9,6 +9,7 @@ import Home from "./pages/home";
 import Page_Error from "./pages/page_error";
 import Nav from "./components/navbar";
 import My_Appointments from "./pages/my_appointments";
+import Lost_and_found from "./pages/lost_and_found";
 
 function App() {
     const theme = createTheme({
@@ -41,7 +42,11 @@ function App() {
                             <Route path="home" element={<Home />} />
                             <Route path="error" element={<Page_Error />} />
                             <Route
-                                path="Termine"
+                                path="fundsachen"
+                                element={<Lost_and_found />}
+                            />
+                            <Route
+                                path="termine"
                                 element={<My_Appointments />}
                             />
                             <Route path="*" element={<Page_Error />} />

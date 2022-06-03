@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 
-const pages = ["Home", "Error"];
+const pages = ["Fundsachen"];
 const settings = ["Termine"];
 
 const Nav = () => {
@@ -112,7 +112,7 @@ const Nav = () => {
                                             }}
                                             to={`/${page.toLowerCase()}`}
                                         >
-                                            {page}
+                                            {page.replace("_", " ")}
                                         </Link>
                                     </Typography>
                                 </MenuItem>
@@ -164,7 +164,7 @@ const Nav = () => {
                                     }}
                                     to={`/${page.toLowerCase()}`}
                                 >
-                                    {page}
+                                    {page.replace("_", " ")}
                                 </Link>
                             </Button>
                         ))}
@@ -215,7 +215,7 @@ const Nav = () => {
                                             }}
                                             to={`/${setting.toLowerCase()}`}
                                         >
-                                            {setting}
+                                            {setting.replace("_", " ")}
                                         </Link>
                                     </Typography>
                                 </MenuItem>
