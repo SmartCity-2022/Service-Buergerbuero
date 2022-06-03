@@ -36,8 +36,8 @@ function Lost_and_found() {
                     Fundsachen
                 </Typography>
                 <Typography sx={{ mx: "5%" }} variant="h6" align="center">
-                    Hier finden Sie eine Liste aller Fundsachen welche bei uns
-                    hinterliegt sind.
+                    Hier finden Sie eine Liste aller Fundsachen, welche bei uns
+                    hinterlegt sind.
                 </Typography>
                 <Typography
                     sx={{ mx: "5%" }}
@@ -46,8 +46,8 @@ function Lost_and_found() {
                     gutterBottom
                 >
                     Wenn Sie in letzter Zeit etwas verloren haben und glauben,
-                    dass einer dieser Gegenstände ihnen gehören könnte, dann
-                    Melden Sie sich bitte bei uns.
+                    dass einer dieser Gegenstände Ihnen gehören könnte, dann
+                    melden Sie sich bitte bei uns.
                 </Typography>
                 <Divider />
                 <Box sx={{ height: 600, width: "80%", m: "auto", my: "1%" }}>
