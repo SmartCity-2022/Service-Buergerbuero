@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 
-const pages = ["Fundsachen"];
+const pages = ["Fundsachen", "Umzug_melden"];
 const settings = ["Termine"];
 
 const Nav = () => {

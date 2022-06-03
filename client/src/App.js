@@ -10,6 +10,7 @@ import Page_Error from "./pages/page_error";
 import Nav from "./components/navbar";
 import My_Appointments from "./pages/my_appointments";
 import Lost_and_found from "./pages/lost_and_found";
+import Report_move from "./pages/report_move";
 
 function App() {
     const theme = createTheme({
@@ -45,6 +46,10 @@ function App() {
                             <Route
                                 path="fundsachen"
                                 element={<Lost_and_found />}
+                            />
+                            <Route
+                                path="umzug_melden"
+                                element={<Report_move />}
                             />
                             <Route
                                 path="termine"
