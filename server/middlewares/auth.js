@@ -39,10 +39,10 @@ const auth = async (req, res, next) => {
             .post(`${process.env.MAIN_HUB_HOST}/api/token`, {
                 token: refresh_token,
             })
-            .then((res) => {
-                const { accessToken } = res.body;
+            .then((response) => {
+                const { accessToken } = response.body;
                 if (accessToken) {
-                    res.cookie("accessToken", accessToken, {
+                    response.cookie("accessToken", accessToken, {
                         domain: ".smartcity.w-mi.de",
                     });
                     const { payload } = verify_jwt(accessToken);
@@ -51,6 +51,9 @@ const auth = async (req, res, next) => {
                         return next();
                     }
                 } else {
+                    if (response.body.errMsg) {
+                        console.log(`token refresh error:\n ${errMsg}`);
+                    }
                     return res
                         .status(500)
                         .send("failed to retrieve access token from main hub");
