@@ -17,7 +17,7 @@ const auth = async (req, res, next) => {
     console.log(`auth recived cookies: ${cookies}`);
 
     const access_token = cookies.accessToken;
-    const refresh_token = cookies.refreshtoken;
+    const refresh_token = cookies.refreshToken;
     console.log(`access token: ${access_token}`);
     console.log(`refresh token: ${refresh_token}`);
 
