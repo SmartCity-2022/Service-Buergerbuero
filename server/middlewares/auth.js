@@ -52,7 +52,9 @@ const auth = async (req, res, next) => {
                     }
                 } else {
                     if (response.data.errMsg) {
-                        console.log(`token refresh error:\n ${errMsg}`);
+                        console.log(
+                            `token refresh error:\n ${response.data.errMsg}`
+                        );
                     }
                     return res
                         .status(500)
