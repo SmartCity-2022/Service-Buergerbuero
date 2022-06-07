@@ -12,7 +12,11 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 allowNull: false,
             },
-            address: {
+            street: {
+                type: DataTypes.STRING,
+                allowNull: true,
+            },
+            building_number: {
                 type: DataTypes.STRING,
                 allowNull: true,
             },
