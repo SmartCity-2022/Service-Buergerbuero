@@ -1,0 +1,28 @@
+name: Check for correct release label
+
+on:
+  pull_request:
+    branches:
+      - master
+    types:
+      - labeled
+      - opened
+      - unlabeled
+
+jobs:
+  checkForReleaseLabel:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'skip-release') == false
+    name: Check for correct release label
+
+    steps:
+      - name: Get Release Type by label
+        uses: actions-ecosystem/action-release-label@v1
+        id: release-label
+        with:
+          label_prefix: ''
+      - name: Check for Label
+        if: ${{ steps.release-label.outputs.level == null }}
+        run: |
+          echo "No release label found"
+          exit 1
