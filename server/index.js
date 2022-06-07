@@ -71,3 +71,5 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
         }
     });
 });
+
+module.exports = { app };
