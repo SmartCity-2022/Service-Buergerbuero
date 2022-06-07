@@ -40,7 +40,8 @@ const auth = async (req, res, next) => {
                 token: refresh_token,
             })
             .then((response) => {
-                const { accessToken } = response.body;
+                const { accessToken } = response.data;
+
                 if (accessToken) {
                     res.cookie("accessToken", accessToken, {
                         domain: ".smartcity.w-mi.de",
@@ -51,7 +52,7 @@ const auth = async (req, res, next) => {
                         return next();
                     }
                 } else {
-                    if (response.body.errMsg) {
+                    if (response.data.errMsg) {
                         console.log(`token refresh error:\n ${errMsg}`);
                     }
                     return res
