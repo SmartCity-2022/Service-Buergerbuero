@@ -16,7 +16,8 @@ async function create_mockdata(n) {
         citizen = await db.citizen.create({
             first_name: fn,
             last_name: ln,
-            address: faker.address.streetAddress(),
+            street: faker.address.streetName(),
+            building_number: faker.helpers.regexpStyleStringParse("[0-1420]"),
             email: faker.internet.email(fn, ln),
             phone: faker.phone.phoneNumber("+49 ### ## ## ##"),
         });
