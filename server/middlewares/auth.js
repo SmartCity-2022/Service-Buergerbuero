@@ -62,7 +62,13 @@ const auth = async (req, res, next) => {
                 }
             })
             .catch((err) => {
-                console.error(err);
+                if (err.response.data.errMsg) {
+                    console.log(
+                        `token refresh error:\n ${err.response.data.errMsg}`
+                    );
+                } else {
+                    console.error(err);
+                }
             });
     }
 
