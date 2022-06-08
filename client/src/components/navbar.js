@@ -100,22 +100,22 @@ const Nav = () => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                                <Link
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                    to={`/${page.toLowerCase()}`}
                                 >
-                                    <Typography textAlign="center">
-                                        <Link
-                                            style={{
-                                                textDecoration: "none",
-                                                color: "black",
-                                            }}
-                                            to={`/${page.toLowerCase()}`}
-                                        >
+                                    <MenuItem
+                                        key={page}
+                                        onClick={handleCloseNavMenu}
+                                    >
+                                        <Typography textAlign="center">
                                             {page.replace("_", " ")}
-                                        </Link>
-                                    </Typography>
-                                </MenuItem>
+                                        </Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
@@ -203,22 +203,22 @@ const Nav = () => {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem
-                                    key={setting}
-                                    onClick={handleCloseUserMenu}
+                                <Link
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                    to={`/${setting.toLowerCase()}`}
                                 >
-                                    <Typography textAlign="center">
-                                        <Link
-                                            style={{
-                                                textDecoration: "none",
-                                                color: "black",
-                                            }}
-                                            to={`/${setting.toLowerCase()}`}
-                                        >
+                                    <MenuItem
+                                        key={setting}
+                                        onClick={handleCloseUserMenu}
+                                    >
+                                        <Typography textAlign="center">
                                             {setting.replace("_", " ")}
-                                        </Link>
-                                    </Typography>
-                                </MenuItem>
+                                        </Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
