@@ -41,6 +41,7 @@ const auth = async (req, res, next) => {
             })
             .then((response) => {
                 const { accessToken } = response.data;
+
                 if (accessToken) {
                     res.cookie("accessToken", accessToken, {
                         domain: ".smartcity.w-mi.de",
