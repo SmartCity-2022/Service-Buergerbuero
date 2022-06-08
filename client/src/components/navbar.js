@@ -144,29 +144,29 @@ const Nav = () => {
                         }}
                     >
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{
-                                    my: 2,
-                                    mx: 1,
+                            <Link
+                                style={{
+                                    textDecoration: "none",
                                     color: "white",
-                                    display: "block",
-                                    border: 1,
-                                    borderColor: "primary.main",
-                                    ":hover": { borderColor: "white" },
                                 }}
+                                to={`/${page.toLowerCase()}`}
                             >
-                                <Link
-                                    style={{
-                                        textDecoration: "none",
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    sx={{
+                                        my: 2,
+                                        mx: 1,
                                         color: "white",
+                                        display: "block",
+                                        border: 1,
+                                        borderColor: "primary.main",
+                                        ":hover": { borderColor: "white" },
                                     }}
-                                    to={`/${page.toLowerCase()}`}
                                 >
                                     {page.replace("_", " ")}
-                                </Link>
-                            </Button>
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
 
