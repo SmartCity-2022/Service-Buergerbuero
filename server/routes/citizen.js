@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const rabbitmq = require("../rabbitmq");
+const rabbitmq = require("../utils/rabbitmq");
 const { auth } = require("../middlewares/auth");
 require("dotenv").config();
 

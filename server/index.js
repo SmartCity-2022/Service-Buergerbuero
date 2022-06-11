@@ -12,7 +12,7 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 const db = require("./models");
-const rabbitmq = require("./rabbitmq");
+const rabbitmq = require("./utils/rabbitmq");
 
 app.use(cookieParser());
 app.use(express.json());
