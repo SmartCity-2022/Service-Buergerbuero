@@ -4,8 +4,20 @@ const db = require("../models");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
+    const cid = req.query.cid;
+    const email = req.query.email;
+
     let appointments;
-    if (id) {
+    if (email) {
+        appointments = await db.appointment.findAll({
+            where: { "$citizen.email$": email },
+            include: [{ model: db.citizen, as: db.citizen.tableName }],
+        });
+    } else if (cid) {
+        appointments = await db.appointment.findAll({
+            where: { citizenId: cid },
+        });
+    } else if (id) {
         appointments = await db.appointment.findOne({
             where: { id: id },
         });
