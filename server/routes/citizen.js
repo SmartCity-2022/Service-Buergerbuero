@@ -61,6 +61,54 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.patch("/move/", async (req, res) => {
+    const { email, street, building_number, type } = req.body;
+    if (!email || !street || !building_number || !type) {
+        res.status(404).send("something went wrong");
+    } else {
+        let citizen = await db.citizen.update(
+            { street: street, building_number: building_number },
+            { where: { email: email } }
+        );
+        if (!citizen) {
+            res.status(500).json("wasnt able to update citizen");
+        } else {
+            routing_key = undefined;
+            if (type == "to") {
+                routing_key = "service.buergerbuero.citizen_moved_to";
+            }
+            if (type == "away") {
+                routing_key = "service.buergerbuero.citizen_moved_away";
+            }
+            if (type == "within") {
+                routing_key = "service.buergerbuero.citizen_moved_within";
+            }
+
+            try {
+                const conn = await rabbitmq.connect();
+                const channel = await conn.createChannel();
+                await channel.assertExchange(
+                    process.env.RABBITMQEXCHANGE,
+                    "topic",
+                    {
+                        durable: true,
+                    }
+                );
+                channel.publish(
+                    process.env.RABBITMQEXCHANGE,
+                    routing_key,
+                    Buffer.from(JSON.stringify({ email: email }))
+                );
+                console.log(`published ${routing_key}`);
+            } catch (error) {
+                console.error(error);
+            }
+
+            res.status(200).json("success");
+        }
+    }
+});
+
 router.post("/verify/", async (req, res) => {
     const { email } = req.body;
     if (!email) {
