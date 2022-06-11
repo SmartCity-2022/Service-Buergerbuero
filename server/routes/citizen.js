@@ -39,19 +39,9 @@ router.post("/", async (req, res) => {
         res.status(404).send("something went wrong");
     } else {
         try {
-            const conn = await rabbitmq.connect();
-            const channel = await conn.createChannel();
-            await channel.assertExchange(
-                process.env.RABBITMQEXCHANGE,
-                "topic",
-                {
-                    durable: true,
-                }
-            );
-            channel.publish(
-                process.env.RABBITMQEXCHANGE,
+            rabbitmq.publish(
                 "service.buergerbuero.citizen_created",
-                Buffer.from(JSON.stringify({ email: citizen.email }))
+                JSON.stringify({ email: citizen.email })
             );
         } catch (error) {
             console.error(error);
@@ -85,21 +75,7 @@ router.patch("/move/", async (req, res) => {
             }
 
             try {
-                const conn = await rabbitmq.connect();
-                const channel = await conn.createChannel();
-                await channel.assertExchange(
-                    process.env.RABBITMQEXCHANGE,
-                    "topic",
-                    {
-                        durable: true,
-                    }
-                );
-                channel.publish(
-                    process.env.RABBITMQEXCHANGE,
-                    routing_key,
-                    Buffer.from(JSON.stringify({ email: email }))
-                );
-                console.log(`published ${routing_key}`);
+                rabbitmq.publish(routing_key, JSON.stringify({ email: email }));
             } catch (error) {
                 console.error(error);
             }
