@@ -5,6 +5,9 @@ const connection = amqp
     .connect(process.env.AMQPHOST)
     .then(async (con) => {
         channel = await con.createChannel();
+        channel.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
+            durable: true,
+        });
     })
     .catch((error) => {
         console.error(error);
@@ -20,10 +23,6 @@ function get_channel() {
 
 async function listen(queue_name, routing_key, callback) {
     try {
-        await channel.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
-            durable: true,
-        });
-
         const queue = await channel.assertQueue(queue_name, {
             durable: true,
             exclusive: false,
@@ -52,11 +51,7 @@ async function listen(queue_name, routing_key, callback) {
 
 async function publish(routing_key, payload) {
     try {
-        await channel.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
-            durable: true,
-        });
-
-        channel.publish(
+        await channel.publish(
             process.env.RABBITMQEXCHANGE,
             routing_key,
             Buffer.from(payload)
