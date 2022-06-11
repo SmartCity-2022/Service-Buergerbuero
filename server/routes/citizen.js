@@ -38,14 +38,10 @@ router.post("/", async (req, res) => {
     if (!citizen) {
         res.status(404).send("something went wrong");
     } else {
-        try {
-            rabbitmq.publish(
-                "service.buergerbuero.citizen_created",
-                JSON.stringify({ email: citizen.email })
-            );
-        } catch (error) {
-            console.error(error);
-        }
+        rabbitmq.publish(
+            "service.buergerbuero.citizen_created",
+            JSON.stringify({ email: citizen.email })
+        );
 
         res.status(201).json(citizen);
     }
@@ -74,11 +70,7 @@ router.patch("/move/", async (req, res) => {
                 routing_key = "service.buergerbuero.citizen_moved_within";
             }
 
-            try {
-                rabbitmq.publish(routing_key, JSON.stringify({ email: email }));
-            } catch (error) {
-                console.error(error);
-            }
+            rabbitmq.publish(routing_key, JSON.stringify({ email: email }));
 
             res.status(200).json("success");
         }
