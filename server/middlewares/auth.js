@@ -1,5 +1,5 @@
 require("dotenv").config();
-const { verify_jwt } = require("./verify_jwt");
+const { verify_jwt } = require("../utils/verify_jwt");
 const axios = require("axios");
 const cookie_parser = require("cookie-parser");
 

@@ -100,22 +100,22 @@ const Nav = () => {
                             }}
                         >
                             {pages.map((page) => (
-                                <MenuItem
-                                    key={page}
-                                    onClick={handleCloseNavMenu}
+                                <Link
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                    to={`/${page.toLowerCase()}`}
                                 >
-                                    <Typography textAlign="center">
-                                        <Link
-                                            style={{
-                                                textDecoration: "none",
-                                                color: "black",
-                                            }}
-                                            to={`/${page.toLowerCase()}`}
-                                        >
+                                    <MenuItem
+                                        key={page}
+                                        onClick={handleCloseNavMenu}
+                                    >
+                                        <Typography textAlign="center">
                                             {page.replace("_", " ")}
-                                        </Link>
-                                    </Typography>
-                                </MenuItem>
+                                        </Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>
@@ -144,29 +144,29 @@ const Nav = () => {
                         }}
                     >
                         {pages.map((page) => (
-                            <Button
-                                key={page}
-                                onClick={handleCloseNavMenu}
-                                sx={{
-                                    my: 2,
-                                    mx: 1,
+                            <Link
+                                style={{
+                                    textDecoration: "none",
                                     color: "white",
-                                    display: "block",
-                                    border: 1,
-                                    borderColor: "primary.main",
-                                    ":hover": { borderColor: "white" },
                                 }}
+                                to={`/${page.toLowerCase()}`}
                             >
-                                <Link
-                                    style={{
-                                        textDecoration: "none",
+                                <Button
+                                    key={page}
+                                    onClick={handleCloseNavMenu}
+                                    sx={{
+                                        my: 2,
+                                        mx: 1,
                                         color: "white",
+                                        display: "block",
+                                        border: 1,
+                                        borderColor: "primary.main",
+                                        ":hover": { borderColor: "white" },
                                     }}
-                                    to={`/${page.toLowerCase()}`}
                                 >
                                     {page.replace("_", " ")}
-                                </Link>
-                            </Button>
+                                </Button>
+                            </Link>
                         ))}
                     </Box>
 
@@ -203,22 +203,22 @@ const Nav = () => {
                             onClose={handleCloseUserMenu}
                         >
                             {settings.map((setting) => (
-                                <MenuItem
-                                    key={setting}
-                                    onClick={handleCloseUserMenu}
+                                <Link
+                                    style={{
+                                        textDecoration: "none",
+                                        color: "black",
+                                    }}
+                                    to={`/${setting.toLowerCase()}`}
                                 >
-                                    <Typography textAlign="center">
-                                        <Link
-                                            style={{
-                                                textDecoration: "none",
-                                                color: "black",
-                                            }}
-                                            to={`/${setting.toLowerCase()}`}
-                                        >
+                                    <MenuItem
+                                        key={setting}
+                                        onClick={handleCloseUserMenu}
+                                    >
+                                        <Typography textAlign="center">
                                             {setting.replace("_", " ")}
-                                        </Link>
-                                    </Typography>
-                                </MenuItem>
+                                        </Typography>
+                                    </MenuItem>
+                                </Link>
                             ))}
                         </Menu>
                     </Box>

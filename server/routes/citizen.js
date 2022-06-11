@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
-const rabbitmq = require("../rabbitmq");
+const rabbitmq = require("../utils/rabbitmq");
 const { auth } = require("../middlewares/auth");
 require("dotenv").config();
 
@@ -38,26 +38,42 @@ router.post("/", async (req, res) => {
     if (!citizen) {
         res.status(404).send("something went wrong");
     } else {
-        try {
-            const conn = await rabbitmq.connect();
-            const channel = await conn.createChannel();
-            await channel.assertExchange(
-                process.env.RABBITMQEXCHANGE,
-                "topic",
-                {
-                    durable: true,
-                }
-            );
-            channel.publish(
-                process.env.RABBITMQEXCHANGE,
-                "service.buergerbuero.citizen_created",
-                Buffer.from(JSON.stringify({ email: citizen.email }))
-            );
-        } catch (error) {
-            console.error(error);
-        }
+        rabbitmq.publish(
+            "service.buergerbuero.citizen_created",
+            JSON.stringify({ email: citizen.email })
+        );
 
         res.status(201).json(citizen);
+    }
+});
+
+router.patch("/move/", async (req, res) => {
+    const { email, street, building_number, type } = req.body;
+    if (!email || !street || !building_number || !type) {
+        res.status(404).send("something went wrong");
+    } else {
+        let citizen = await db.citizen.update(
+            { street: street, building_number: building_number },
+            { where: { email: email } }
+        );
+        if (!citizen) {
+            res.status(500).json("wasnt able to update citizen");
+        } else {
+            routing_key = undefined;
+            if (type == "to") {
+                routing_key = "service.buergerbuero.citizen_moved_to";
+            }
+            if (type == "away") {
+                routing_key = "service.buergerbuero.citizen_moved_away";
+            }
+            if (type == "within") {
+                routing_key = "service.buergerbuero.citizen_moved_within";
+            }
+
+            rabbitmq.publish(routing_key, JSON.stringify({ email: email }));
+
+            res.status(200).json("success");
+        }
     }
 });
 
