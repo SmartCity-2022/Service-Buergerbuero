@@ -1,4 +1,5 @@
 const express = require("express");
+const { Sequelize } = require("../models");
 const router = express.Router();
 const db = require("../models");
 
@@ -44,6 +45,29 @@ router.delete("/", async (req, res) => {
         res.status(404).send("something went wrong");
     } else {
         res.status(202).send("success");
+    }
+});
+
+router.patch("/complete/", async (req, res) => {
+    const { rid } = req.body;
+    if (!rid) {
+        res.status(404).send("something went wrong");
+    } else {
+        const na_date = new Date().toLocaleDateString();
+        const split_date = na_date.split("/");
+        const date = `${split_date[2]}-${split_date[1]}-${split_date[0]}`;
+        let request = await db.request.update(
+            {
+                complete: true,
+                completed_on: date,
+            },
+            { where: { id: rid } }
+        );
+        if (!request) {
+            res.status(404).send("something went wrong");
+        } else {
+            res.status(202).send("success");
+        }
     }
 });
 
