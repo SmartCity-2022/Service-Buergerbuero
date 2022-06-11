@@ -20,11 +20,11 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { cid, from, to } = req.body;
-    if (!cid) {
+    const { email, from, to } = req.body;
+    if (!email || !from || !to) {
         res.status(404).send("something went wrong");
     } else {
-        const citizen = await db.citizen.findOne({ where: { id: cid } });
+        const citizen = await db.citizen.findOne({ where: { email: email } });
         const a = await citizen.createAppointment({
             from: from,
             to: to,

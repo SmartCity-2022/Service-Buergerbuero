@@ -20,19 +20,19 @@ router.get("/", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-    const { cid, type, desc } = req.body;
-    if (!cid) {
+    const { email, type, desc } = req.body;
+    if (!email || !type || !desc) {
         res.status(404).send("something went wrong");
     } else {
-        const citizen = await db.citizen.findOne({ where: { id: cid } });
-        const reqest = await citizen.createRequest({
+        const citizen = await db.citizen.findOne({ where: { email: email } });
+        const request = await citizen.createRequest({
             type: type,
             desc: desc,
         });
-        if (!reqest) {
+        if (!request) {
             res.status(404).send("something went wrong");
         } else {
-            res.status(201).json(a);
+            res.status(201).json("success");
         }
     }
 });
