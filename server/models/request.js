@@ -9,7 +9,7 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
             },
-            completed: {
+            completed_on: {
                 type: DataTypes.DATEONLY,
                 allowNull: true,
             },

@@ -12,7 +12,7 @@ const cookieParser = require("cookie-parser");
 
 const app = express();
 const db = require("./models");
-const rabbitmq = require("./rabbitmq");
+const rabbitmq = require("./utils/rabbitmq");
 
 app.use(cookieParser());
 app.use(express.json());
@@ -34,38 +34,11 @@ db.sequelize.sync({ force: rebuild }).then(async () => {
         console.log(`\nserver running on port: ${port}\n`);
 
         try {
-            const con = await rabbitmq.connect();
-            const ch = await con.createChannel();
-
-            await ch.assertExchange(process.env.RABBITMQEXCHANGE, "topic", {
-                durable: true,
+            await rabbitmq.listen("", "service.world", (secret) => {
+                process.env.JWT_SECRET = secret;
             });
 
-            const queue = await ch.assertQueue("", {
-                durable: true,
-                exclusive: false,
-                autoDelete: true,
-            });
-            await ch.bindQueue(
-                queue.queue,
-                process.env.RABBITMQEXCHANGE,
-                "service.world"
-            );
-            await ch.consume(queue.queue, (msg) => {
-                string = msg.content.toString();
-                process.env.JWT_SECRET = string;
-                console.log(`world string: ${string}`);
-                console.log(`check env var: ${process.env.JWT_SECRET}`);
-                ch.ack(msg);
-                console.log("consumed service.world");
-            });
-
-            ch.publish(
-                process.env.RABBITMQEXCHANGE,
-                "service.hello",
-                Buffer.from("buergerbuero")
-            );
-            console.log("published service.hello");
+            await rabbitmq.publish("service.hello", "buergerbuero");
         } catch (error) {
             console.error(error);
         }
