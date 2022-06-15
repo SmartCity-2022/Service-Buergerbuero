@@ -1,6 +1,6 @@
 import "./App.css";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
@@ -12,7 +12,10 @@ import My_Appointments from "./pages/my_appointments";
 import Lost_and_found from "./pages/lost_and_found";
 import Report_move from "./pages/report_move";
 
+export const AuthContext = createContext();
+
 function App() {
+    const [authState, setAuthState] = useState({ email: "", status: false });
     const theme = createTheme({
         status: {
             danger: "#e53e3e",
@@ -35,31 +38,33 @@ function App() {
 
     return (
         <>
-            <Router>
-                <ThemeProvider theme={theme}>
-                    <Nav />
-                    <main>
-                        <Routes>
-                            <Route path="/" element={<Home />} />
-                            <Route path="home" element={<Home />} />
-                            <Route path="error" element={<Page_Error />} />
-                            <Route
-                                path="fundsachen"
-                                element={<Lost_and_found />}
-                            />
-                            <Route
-                                path="umzug_melden"
-                                element={<Report_move />}
-                            />
-                            <Route
-                                path="termine"
-                                element={<My_Appointments />}
-                            />
-                            <Route path="*" element={<Page_Error />} />
-                        </Routes>
-                    </main>
-                </ThemeProvider>
-            </Router>
+            <AuthContext.Provider value={{ authState, setAuthState }}>
+                <Router>
+                    <ThemeProvider theme={theme}>
+                        <Nav />
+                        <main>
+                            <Routes>
+                                <Route path="/" element={<Home />} />
+                                <Route path="home" element={<Home />} />
+                                <Route path="error" element={<Page_Error />} />
+                                <Route
+                                    path="fundsachen"
+                                    element={<Lost_and_found />}
+                                />
+                                <Route
+                                    path="umzug_melden"
+                                    element={<Report_move />}
+                                />
+                                <Route
+                                    path="termine"
+                                    element={<My_Appointments />}
+                                />
+                                <Route path="*" element={<Page_Error />} />
+                            </Routes>
+                        </main>
+                    </ThemeProvider>
+                </Router>
+            </AuthContext.Provider>
         </>
     );
 }

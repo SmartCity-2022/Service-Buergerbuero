@@ -7,8 +7,7 @@ require("dotenv").config();
 const { create_mockdata } = require("../mockdata");
 
 router.get("/", auth, async (req, res) => {
-    console.log("test auth");
-    res.send("OK");
+    res.json(req.user.email);
 });
 
 router.get("/mock", async (req, res) => {
