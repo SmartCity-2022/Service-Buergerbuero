@@ -7,6 +7,7 @@ const auth = async (req, res, next) => {
     // make it possible to skip actual auth for testing/development
     var skip = process.env.SKIP_AUTH === "true";
     if (skip) {
+        req.user = { email: "auth@skipped.lol" };
         return next();
     }
 
@@ -14,7 +15,7 @@ const auth = async (req, res, next) => {
     if (!cookies) {
         return res.status(401).send("missing Authorization cookies");
     }
-    console.log(`auth recived cookies: ${cookies}`);
+    //console.log(`auth recived cookies: ${cookies}`);
 
     const access_token = cookies.accessToken;
     const refresh_token = cookies.refreshToken;
