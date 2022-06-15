@@ -16,6 +16,7 @@ export const AuthContext = createContext();
 
 function App() {
     const [authState, setAuthState] = useState({ email: "", status: false });
+
     const theme = createTheme({
         status: {
             danger: "#e53e3e",
@@ -35,6 +36,21 @@ function App() {
             },
         },
     });
+
+    useEffect(() => {
+        axios
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/test`, {
+                withCredentials: true,
+            })
+            .then((res) => {
+                console.log(res.data);
+                setAuthState({ email: res.data, status: true });
+            })
+            .catch((error) => {
+                console.log(error.response.data);
+                setAuthState({ email: "", status: false });
+            });
+    }, []);
 
     return (
         <>
