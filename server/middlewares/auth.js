@@ -47,9 +47,9 @@ const auth = async (req, res, next) => {
                     res.cookie("accessToken", accessToken, {
                         domain: ".smartcity.w-mi.de",
                     });
-                    const { payload } = verify_jwt(accessToken);
-                    if (payload) {
-                        req.user = payload;
+                    const { new_payload } = verify_jwt(accessToken);
+                    if (new_payload) {
+                        req.user = new_payload;
                         return next();
                     }
                 } else {
