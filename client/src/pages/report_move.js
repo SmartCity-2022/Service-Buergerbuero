@@ -1,14 +1,21 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import { Button, Box, Typography, TextField } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { AuthContext } from "../App";
 import { useFormik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
+import AlertModal from "../components/alert_modal";
 
 function Report_move() {
     const { authState } = useContext(AuthContext);
     const [is_disabled, set_is_disabled] = useState(false);
+    const [is_open, set_is_open] = useState(false);
+    const [modal, set_modal] = useState({
+        title: "Fehler",
+        content:
+            "Bei der Bearbeitung ist etwas schiefgelaufen.Versuchen Sie es später erneut oder kontaktieren Sie uns hier: 3171023!",
+    });
 
     let initial_values = {
         first_name: "",
@@ -59,10 +66,16 @@ function Report_move() {
             .post(`${process.env.REACT_APP_BACKEND_HOST}/citizen`, data)
             .then((res) => {
                 console.log(res.data);
+                set_modal({
+                    title: "Erfolg",
+                    content:
+                        "Die Anmeldung als zugezogener Bürger war erfolgreich!",
+                });
             })
             .catch((obj) => {
                 console.log(obj.response.data);
             });
+        set_is_open(true);
     };
 
     const guest_formik = useFormik({
@@ -83,6 +96,13 @@ function Report_move() {
                     justifyContent: "flex-start",
                 }}
             >
+                {is_open && (
+                    <AlertModal
+                        title={modal.title}
+                        content={modal.content}
+                        open={true}
+                    />
+                )}
                 <Box sx={{ mx: "5em", width: "33%" }}>
                     <Typography sx={{}} variant="h3" align="left" gutterBottom>
                         Zuzug melden
