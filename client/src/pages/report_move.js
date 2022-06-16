@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Box, Typography, TextField } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import { AuthContext } from "../App";
@@ -8,6 +8,7 @@ import * as yup from "yup";
 
 function Report_move() {
     const { authState } = useContext(AuthContext);
+    const [is_disabled, set_is_disabled] = useState(false);
 
     let initial_values = {
         first_name: "",
@@ -53,6 +54,7 @@ function Report_move() {
 
     const guest_submit = async (data) => {
         console.log(data);
+        set_is_disabled(true);
         await axios
             .post(`${process.env.REACT_APP_BACKEND_HOST}/citizen`, data)
             .then((res) => {
@@ -248,6 +250,7 @@ function Report_move() {
                                 variant="contained"
                                 color="primary"
                                 type="submit"
+                                disabled={is_disabled}
                             >
                                 Melden
                             </Button>
