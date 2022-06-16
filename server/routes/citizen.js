@@ -60,9 +60,6 @@ router.patch("/move/", async (req, res) => {
             res.status(500).json("wasnt able to update citizen");
         } else {
             routing_key = undefined;
-            if (type == "to") {
-                routing_key = "service.buergerbuero.citizen_moved_to";
-            }
             if (type == "away") {
                 routing_key = "service.buergerbuero.citizen_moved_away";
             }
