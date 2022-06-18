@@ -12,6 +12,7 @@ import Nav from "./components/navbar";
 import My_Appointments from "./pages/my_appointments";
 import Lost_and_found from "./pages/lost_and_found";
 import Report_move from "./pages/report_move";
+import Make_Appointment from "./pages/make_appointment";
 
 export const AuthContext = createContext();
 
@@ -71,6 +72,10 @@ function App() {
                                 <Route
                                     path="umzug_melden"
                                     element={<Report_move />}
+                                />
+                                <Route
+                                    path="termin_reservieren"
+                                    element={<Make_Appointment />}
                                 />
                                 <Route
                                     path="termine"
