@@ -76,6 +76,7 @@ function Make_Appointment() {
     };
 
     const handleReset = () => {
+        formik.handleReset();
         setActiveStep(0);
     };
 
@@ -95,31 +96,121 @@ function Make_Appointment() {
     const issue_info = () => {
         if (formik.values.issue === "An- und Ummelden") {
             return (
-                <>
-                    <Typography sx={{ mx: "5%" }} variant="h6" align="center">
-                        An- und Ummelden INFOS
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    An- und Ummelden Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        erforderliche Unterlagen:
+                        <br />
+                        <br />- Ausweisdokument(e)
+                        <br />- Wohnungsgeberbestätigung
                     </Typography>
-                </>
+                </Typography>
             );
         }
         if (formik.values.issue === "Beantragung Ausweisdokumente") {
             return (
-                <>
-                    <Typography sx={{ mx: "5%" }} variant="h6" align="center">
-                        "Beantragung Ausweisdokumente" INFOS
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    Beantragung Ausweisdokumente Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        erforderliche Unterlagen / Gebühren für Personalausweise
+                        / Reisepässe:
+                        <br />
+                        <br />- Personalausweis oder Reisepass
+                        <br />- Geburts- oder Heiratsurkunde
+                        <br />- aktuelle biometrisches Lichtbild
+                        <br />
+                        <br />- Gebühr: 37,00 € (Personalausweis) oder 60,00 €
+                        (Reisepass)
+                        <br />
+                        <br />
+                        <br />
+                        erforderliche Unterlagen für Kinderreisepässe:
+                        <br />
+                        <br />- Geburtsurkunde des Kindes
+                        <br />- Zustimmungserklärung aller Sorgeberechtigten
+                        <br />- aktuelles Lichtbild des Kindes
+                        <br />- Vorsprache mit Kind
+                        <br />
+                        <br />- Gebühr: 13,00 € (Neuausstellung) oder 6,00 €
+                        (Verlängerung/Bildaktualisierung)
+                        <br />
+                        <br />
+                        <br />
+                        Die Zustimmungserklärung zur Antragstellung/Aushändigung
+                        von Kinderreisepässen können Sie über diesen
+                        Formularassistenten ausfüllen und anschließend
+                        ausdrucken:
+                        <br />
+                        https://formulare-owl.de/metaform/Form-Solutions/sid/assistant/6253e3021b302b43227b8354
                     </Typography>
-                </>
+                </Typography>
             );
         }
         if (formik.values.issue === "Beglaubiegungen") {
             return (
-                <>
-                    <Typography sx={{ mx: "5%" }} variant="h6" align="center">
-                        "Beglaubiegungen" INFOS
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    An- und Ummelden Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        erforderliche Unterlagen / Gebühren:
+                        <br />
+                        <br />- Original des Dokuments
+                        <br />- Kopie(n) des Dokuments
+                        <br />- Gebühr (Höhe abhängig von der Anzahl)
                     </Typography>
-                </>
+                </Typography>
             );
         }
+        if (formik.values.issue === "Fischereischein") {
+            return (
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    An- und Ummelden Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        erforderliche Unterlagen:
+                        <br />
+                        <br />- Personalausweis oder Reisepass
+                        <br />- Fischereischein oder Prüfungszeugnis
+                    </Typography>
+                </Typography>
+            );
+        }
+        if (formik.values.issue === "Ausländer-Angelegenheiten") {
+            return (
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    An- und Ummelden Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        - Aufenthaltstitel oder
+                        <br />- gestattung oder Duldung
+                        <br />- Pass (wenn vorhanden)
+                    </Typography>
+                </Typography>
+            );
+        }
+        if (formik.values.issue === "Führerscheinangelegenheiten") {
+            return (
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    An- und Ummelden Informationen:
+                    <Typography sx={{ m: "2%" }} align="left">
+                        erforderliche Unterlagen:
+                        <br />
+                        <br />- Personalausweis oder Reisepass
+                        <br />- aktuelles biometrisches Passbild
+                        <br />- Führerschein
+                        <br />
+                        <br />
+                        Im Hinblick auf weitere Unterlagen erkundigen Sie sich
+                        bitte im Vorfeld bei Ihrer Fahrschule, beim
+                        Straßenverkehrsamt des Kreises Herford oder beim
+                        Bürgerbüro der Stadt Löhne.
+                    </Typography>
+                </Typography>
+            );
+        }
+
+        return (
+            <Typography sx={{ m: "1%" }} variant="h5" align="left" color="red">
+                Bitte wählen Sie oben ein Anliegen aus!
+            </Typography>
+        );
     };
 
     const step_1 = () => {
@@ -150,9 +241,27 @@ function Make_Appointment() {
                             <MenuItem value={"An- und Ummelden"}>
                                 An- und Ummelden
                             </MenuItem>
+                            <MenuItem value={"Fischereischein"}>
+                                Fischereischein
+                            </MenuItem>
+                            <MenuItem value={"Ausländer-Angelegenheiten"}>
+                                Ausländer-Angelegenheiten
+                            </MenuItem>
+                            <MenuItem value={"Führerscheinangelegenheiten"}>
+                                Führerscheinangelegenheiten
+                            </MenuItem>
                         </Select>
                     </FormControl>
-                    {formik.values.issue !== undefined && issue_info()}
+                    <Box
+                        sx={{
+                            border: 1,
+                            borderColor: "lightgray",
+                            minHeight: "333px",
+                            mx: "2.5%",
+                        }}
+                    >
+                        {issue_info()}
+                    </Box>
                 </Box>
             </>
         );
@@ -232,7 +341,9 @@ function Make_Appointment() {
                                     }}
                                 >
                                     <Box sx={{ flex: "1 1 auto" }} />
-                                    <Button onClick={handleReset}>Reset</Button>
+                                    <Button onClick={handleReset}>
+                                        Noch einen Termin reservieren
+                                    </Button>
                                 </Box>
                             </React.Fragment>
                         ) : (
