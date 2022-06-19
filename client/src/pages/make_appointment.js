@@ -62,14 +62,23 @@ function Make_Appointment() {
 
     const handleNext = () => {
         if (formik.values.issue !== "") {
-            let newSkipped = skipped;
-            if (isStepSkipped(activeStep)) {
-                newSkipped = new Set(newSkipped.values());
-                newSkipped.delete(activeStep);
-            }
+            if (
+                activeStep != 1 ||
+                formik.values.mon != "" ||
+                formik.values.tue != "" ||
+                formik.values.wed != "" ||
+                formik.values.thu != "" ||
+                formik.values.fri != ""
+            ) {
+                let newSkipped = skipped;
+                if (isStepSkipped(activeStep)) {
+                    newSkipped = new Set(newSkipped.values());
+                    newSkipped.delete(activeStep);
+                }
 
-            setActiveStep((prevActiveStep) => prevActiveStep + 1);
-            setSkipped(newSkipped);
+                setActiveStep((prevActiveStep) => prevActiveStep + 1);
+                setSkipped(newSkipped);
+            }
         }
         if (activeStep === steps.length - 1) {
             formik.submitForm();
@@ -112,12 +121,75 @@ function Make_Appointment() {
     };
 
     const handle_time_select = (event) => {
-        console.log(event.target.value);
         if (event.target.name === "mon") {
             formik.values.mon = event.target.value;
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
         }
         if (event.target.parentNode.name === "mon") {
             formik.values.mon = event.target.parentNode.value;
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
+        }
+        if (event.target.name === "tue") {
+            formik.values.tue = event.target.value;
+            formik.values.mon = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
+        }
+        if (event.target.parentNode.name === "tue") {
+            formik.values.tue = event.target.parentNode.value;
+            formik.values.mon = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
+        }
+        if (event.target.name === "wed") {
+            formik.values.wed = event.target.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
+        }
+        if (event.target.parentNode.name === "wed") {
+            formik.values.wed = event.target.parentNode.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.thu = "";
+            formik.values.fri = "";
+        }
+        if (event.target.name === "thu") {
+            formik.values.thu = event.target.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.fri = "";
+        }
+        if (event.target.parentNode.name === "thu") {
+            formik.values.thu = event.target.parentNode.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.fri = "";
+        }
+        if (event.target.name === "fri") {
+            formik.values.fri = event.target.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
+        }
+        if (event.target.parentNode.name === "fri") {
+            formik.values.fri = event.target.parentNode.value;
+            formik.values.mon = "";
+            formik.values.tue = "";
+            formik.values.wed = "";
+            formik.values.thu = "";
         }
     };
 
@@ -131,7 +203,40 @@ function Make_Appointment() {
     };
 
     const submit = (data) => {
-        console.log(data);
+        let date = "";
+        let time = "";
+        if (data.mon !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(0, "days")
+                .format("YYYY-MM-DD");
+            time = data.mon;
+        }
+        if (data.tue !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(1, "days")
+                .format("YYYY-MM-DD");
+            time = data.tue;
+        }
+        if (data.wed !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(2, "days")
+                .format("YYYY-MM-DD");
+            time = data.wed;
+        }
+        if (data.thu !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(3, "days")
+                .format("YYYY-MM-DD");
+            time = data.thu;
+        }
+        if (data.fri !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(4, "days")
+                .format("YYYY-MM-DD");
+            time = data.fri;
+        }
+        let appointment = { date: date, time: time, issue: data.issue };
+        console.log(appointment);
     };
 
     const formik = useFormik({
@@ -403,6 +508,9 @@ function Make_Appointment() {
                                             width: "20px",
                                             height: "20px",
                                         }}
+                                        name={"tue"}
+                                        value={time}
+                                        onClick={handle_time_select}
                                     >
                                         <Typography
                                             key={time}
@@ -427,6 +535,9 @@ function Make_Appointment() {
                                             width: "20px",
                                             height: "20px",
                                         }}
+                                        name={"wed"}
+                                        value={time}
+                                        onClick={handle_time_select}
                                     >
                                         <Typography
                                             key={time}
@@ -451,6 +562,9 @@ function Make_Appointment() {
                                             width: "20px",
                                             height: "20px",
                                         }}
+                                        name={"thu"}
+                                        value={time}
+                                        onClick={handle_time_select}
                                     >
                                         <Typography
                                             key={time}
@@ -475,6 +589,9 @@ function Make_Appointment() {
                                             width: "20px",
                                             height: "20px",
                                         }}
+                                        name={"fri"}
+                                        value={time}
+                                        onClick={handle_time_select}
                                     >
                                         <Typography
                                             key={time}
