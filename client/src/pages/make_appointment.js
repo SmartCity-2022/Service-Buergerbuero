@@ -285,13 +285,19 @@ function Make_Appointment() {
     };
     const step_2 = () => {
         return (
-            <>
+            <Box
+                sx={{
+                    border: 1,
+                    borderColor: "lightgray",
+                    minHeight: "333px",
+                    m: "2%",
+                }}
+            >
                 <Box
                     sx={{
                         display: "flex",
                         flexDirection: "row",
-                        pt: 2,
-                        m: "2%",
+                        m: "1%",
                     }}
                 >
                     <Button
@@ -318,7 +324,7 @@ function Make_Appointment() {
                             {`KW ${cw(cw_offset).week}`}
                         </Typography>
                         <Typography sx={{ fontStyle: "italic", fontSize: 14 }}>
-                            {`bis: ${moment(cw(cw_offset).son).format(
+                            {`bis: ${moment(cw(cw_offset).sun).format(
                                 "DD.MM.YY"
                             )}`}
                         </Typography>
@@ -328,7 +334,7 @@ function Make_Appointment() {
                         Weiter
                     </Button>
                 </Box>
-            </>
+            </Box>
         );
     };
     const step_3 = () => {
