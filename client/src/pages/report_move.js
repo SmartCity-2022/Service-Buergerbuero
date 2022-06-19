@@ -312,7 +312,7 @@ function Report_move() {
                                     citizen_formik.touched.street &&
                                     Boolean(citizen_formik.errors.street)
                                 }
-                                helperText={
+                                helpertext={
                                     citizen_formik.touched.street &&
                                     citizen_formik.errors.street
                                 }
@@ -331,7 +331,7 @@ function Report_move() {
                                         citizen_formik.errors.building_number
                                     )
                                 }
-                                helperText={
+                                helpertext={
                                     citizen_formik.touched.building_number &&
                                     citizen_formik.errors.building_number
                                 }
@@ -486,7 +486,7 @@ function Report_move() {
                                     guest_formik.touched.first_name &&
                                     Boolean(guest_formik.errors.first_name)
                                 }
-                                helperText={
+                                helpertext={
                                     guest_formik.touched.first_name &&
                                     guest_formik.errors.first_name
                                 }
@@ -503,7 +503,7 @@ function Report_move() {
                                     guest_formik.touched.last_name &&
                                     Boolean(guest_formik.errors.last_name)
                                 }
-                                helperText={
+                                helpertext={
                                     guest_formik.touched.last_name &&
                                     guest_formik.errors.last_name
                                 }
@@ -522,7 +522,7 @@ function Report_move() {
                                     guest_formik.touched.email &&
                                     Boolean(guest_formik.errors.email)
                                 }
-                                helperText={
+                                helpertext={
                                     guest_formik.touched.email &&
                                     guest_formik.errors.email
                                 }
@@ -549,7 +549,7 @@ function Report_move() {
                                     guest_formik.touched.street &&
                                     Boolean(guest_formik.errors.street)
                                 }
-                                helperText={
+                                helpertext={
                                     guest_formik.touched.street &&
                                     guest_formik.errors.street
                                 }
@@ -566,7 +566,7 @@ function Report_move() {
                                     guest_formik.touched.building_number &&
                                     Boolean(guest_formik.errors.building_number)
                                 }
-                                helperText={
+                                helpertext={
                                     guest_formik.touched.building_number &&
                                     guest_formik.errors.building_number
                                 }
