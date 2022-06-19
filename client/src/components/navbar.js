@@ -99,6 +99,7 @@ const Nav = () => {
                         >
                             {pages.map((page) => (
                                 <Link
+                                    key={page}
                                     style={{
                                         textDecoration: "none",
                                         color: "black",
@@ -109,7 +110,10 @@ const Nav = () => {
                                         key={page}
                                         onClick={handleCloseNavMenu}
                                     >
-                                        <Typography textAlign="center">
+                                        <Typography
+                                            key={page}
+                                            textAlign="center"
+                                        >
                                             {page.replace("_", " ")}
                                         </Typography>
                                     </MenuItem>
@@ -143,6 +147,7 @@ const Nav = () => {
                     >
                         {pages.map((page) => (
                             <Link
+                                key={page}
                                 style={{
                                     textDecoration: "none",
                                     color: "white",
@@ -202,6 +207,7 @@ const Nav = () => {
                         >
                             {settings.map((setting) => (
                                 <Link
+                                    key={setting}
                                     style={{
                                         textDecoration: "none",
                                         color: "black",
@@ -212,7 +218,10 @@ const Nav = () => {
                                         key={setting}
                                         onClick={handleCloseUserMenu}
                                     >
-                                        <Typography textAlign="center">
+                                        <Typography
+                                            key={setting}
+                                            textAlign="center"
+                                        >
                                             {setting.replace("_", " ")}
                                         </Typography>
                                     </MenuItem>
