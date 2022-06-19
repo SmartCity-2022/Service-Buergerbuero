@@ -13,6 +13,8 @@ import {
     FormControl,
     MenuItem,
     InputLabel,
+    Container,
+    Toolbar,
 } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
@@ -21,6 +23,8 @@ import { useFormik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
 import AlertModal from "../components/alert_modal";
+import cw from "../utils/date_helper";
+const moment = require("moment");
 
 const steps = ["Anliegen auswählen", "Termin wählen", "Bestätigen"];
 
@@ -29,6 +33,7 @@ const optional = [];
 function Make_Appointment() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set());
+    const [cw_offset, set_cw_offset] = React.useState(0);
 
     const isStepOptional = (step) => {
         if (step in optional) {
@@ -42,7 +47,7 @@ function Make_Appointment() {
     };
 
     const handleNext = () => {
-        if (formik.values.issue !== undefined) {
+        if (formik.values.issue !== "") {
             let newSkipped = skipped;
             if (isStepSkipped(activeStep)) {
                 newSkipped = new Set(newSkipped.values());
@@ -54,6 +59,18 @@ function Make_Appointment() {
         }
         if (activeStep === steps.length - 1) {
             formik.submitForm();
+        }
+    };
+
+    const cw_handle_next = () => {
+        if (cw_offset <= 6) {
+            set_cw_offset((curr) => curr + 1);
+        }
+    };
+
+    const cw_handle_back = () => {
+        if (cw_offset > 0) {
+            set_cw_offset((curr) => curr - 1);
         }
     };
 
@@ -81,7 +98,7 @@ function Make_Appointment() {
     };
 
     const initial_values = {
-        issue: undefined,
+        issue: "",
     };
 
     const submit = (data) => {
@@ -228,7 +245,7 @@ function Make_Appointment() {
                                 formik.touched.issue &&
                                 Boolean(formik.errors.issue)
                             }
-                            helperText={
+                            helpertext={
                                 formik.touched.issue && formik.errors.issue
                             }
                         >
@@ -269,7 +286,48 @@ function Make_Appointment() {
     const step_2 = () => {
         return (
             <>
-                <h1>step 1 </h1>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row",
+                        pt: 2,
+                        m: "2%",
+                    }}
+                >
+                    <Button
+                        color="inherit"
+                        disabled={cw_offset === 0}
+                        onClick={cw_handle_back}
+                        sx={{ mr: 1 }}
+                    >
+                        Zurück
+                    </Button>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                        }}
+                    >
+                        <Typography sx={{ fontStyle: "italic", fontSize: 14 }}>
+                            {`vom: ${moment(cw(cw_offset).mon).format(
+                                "DD.MM.YY"
+                            )}`}
+                        </Typography>
+                        <Typography sx={{ mx: "10px", fontWeight: "bold" }}>
+                            {`KW ${cw(cw_offset).week}`}
+                        </Typography>
+                        <Typography sx={{ fontStyle: "italic", fontSize: 14 }}>
+                            {`bis: ${moment(cw(cw_offset).son).format(
+                                "DD.MM.YY"
+                            )}`}
+                        </Typography>
+                    </Box>
+                    <Box sx={{ flex: "1 1 auto" }} />
+                    <Button onClick={cw_handle_next} disabled={cw_offset === 6}>
+                        Weiter
+                    </Button>
+                </Box>
             </>
         );
     };
