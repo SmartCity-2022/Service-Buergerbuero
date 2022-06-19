@@ -23,8 +23,8 @@ async function create_mockdata(n) {
         });
 
         await citizen.createAppointment({
-            from: faker.helpers.regexpStyleStringParse("[0-24]:[0-59]:[0-59]"),
-            to: faker.helpers.regexpStyleStringParse("[0-24]:[0-59]:[0-59]"),
+            time: faker.helpers.regexpStyleStringParse("[0-24]:[0-59]:[0-59]"),
+            issue: faker.lorem.word(),
         });
 
         await citizen.createRequest({
