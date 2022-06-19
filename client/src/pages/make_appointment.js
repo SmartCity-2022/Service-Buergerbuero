@@ -31,9 +31,23 @@ const steps = ["Anliegen auswählen", "Termin wählen", "Bestätigen"];
 const optional = [];
 
 function Make_Appointment() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [skipped, setSkipped] = React.useState(new Set());
-    const [cw_offset, set_cw_offset] = React.useState(0);
+    const [activeStep, setActiveStep] = useState(0);
+    const [skipped, setSkipped] = useState(new Set());
+    const [cw_offset, set_cw_offset] = useState(0);
+    const [times, set_times] = useState([]);
+
+    useEffect(() => {
+        let tmp_times = [];
+        for (let i = 0; i < 40; i++) {
+            tmp_times[i] = moment()
+                .local("de")
+                .startOf("day")
+                .add(8, "hours")
+                .add(i * 15, "minutes")
+                .format("HH:mm");
+        }
+        set_times(tmp_times);
+    }, []);
 
     const isStepOptional = (step) => {
         if (step in optional) {
@@ -97,8 +111,23 @@ function Make_Appointment() {
         setActiveStep(0);
     };
 
+    const handle_time_select = (event) => {
+        console.log(event.target.value);
+        if (event.target.name === "mon") {
+            formik.values.mon = event.target.value;
+        }
+        if (event.target.parentNode.name === "mon") {
+            formik.values.mon = event.target.parentNode.value;
+        }
+    };
+
     const initial_values = {
         issue: "",
+        mon: "",
+        tue: "",
+        wed: "",
+        thu: "",
+        fri: "",
     };
 
     const submit = (data) => {
@@ -334,6 +363,132 @@ function Make_Appointment() {
                         Weiter
                     </Button>
                 </Box>
+
+                <Grid container columns={5} align="center" sx={{ m: "1%" }}>
+                    <Grid item xs={1}>
+                        <Typography variant="h6">Montag</Typography>
+                        {times.map((time, index) => {
+                            return (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "20px",
+                                            height: "20px",
+                                        }}
+                                        name={"mon"}
+                                        value={time}
+                                        onClick={handle_time_select}
+                                    >
+                                        <Typography
+                                            key={time}
+                                            sx={{ fontSize: 12 }}
+                                        >
+                                            {time}
+                                        </Typography>
+                                    </Button>
+                                    <br />
+                                </>
+                            );
+                        })}
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Typography variant="h6">Dienstag</Typography>
+                        {times.map((time, index) => {
+                            return (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "20px",
+                                            height: "20px",
+                                        }}
+                                    >
+                                        <Typography
+                                            key={time}
+                                            sx={{ fontSize: 12 }}
+                                        >
+                                            {time}
+                                        </Typography>
+                                    </Button>
+                                    <br />
+                                </>
+                            );
+                        })}
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Typography variant="h6">Mittwoch</Typography>
+                        {times.map((time, index) => {
+                            return (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "20px",
+                                            height: "20px",
+                                        }}
+                                    >
+                                        <Typography
+                                            key={time}
+                                            sx={{ fontSize: 12 }}
+                                        >
+                                            {time}
+                                        </Typography>
+                                    </Button>
+                                    <br />
+                                </>
+                            );
+                        })}
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Typography variant="h6">Donnerstag</Typography>
+                        {times.map((time, index) => {
+                            return (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "20px",
+                                            height: "20px",
+                                        }}
+                                    >
+                                        <Typography
+                                            key={time}
+                                            sx={{ fontSize: 12 }}
+                                        >
+                                            {time}
+                                        </Typography>
+                                    </Button>
+                                    <br />
+                                </>
+                            );
+                        })}
+                    </Grid>
+                    <Grid item xs={1}>
+                        <Typography variant="h6">Freitag</Typography>
+                        {times.map((time, index) => {
+                            return (
+                                <>
+                                    <Button
+                                        variant="contained"
+                                        sx={{
+                                            width: "20px",
+                                            height: "20px",
+                                        }}
+                                    >
+                                        <Typography
+                                            key={time}
+                                            sx={{ fontSize: 12 }}
+                                        >
+                                            {time}
+                                        </Typography>
+                                    </Button>
+                                    <br />
+                                </>
+                            );
+                        })}
+                    </Grid>
+                </Grid>
             </Box>
         );
     };
