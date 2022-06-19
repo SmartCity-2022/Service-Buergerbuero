@@ -9,12 +9,12 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull: false,
                 defaultValue: Sequelize.NOW,
             },
-            from: {
+            time: {
                 type: DataTypes.TIME,
                 allowNull: false,
             },
-            to: {
-                type: DataTypes.TIME,
+            issue: {
+                type: DataTypes.STRING,
                 allowNull: false,
             },
         },
