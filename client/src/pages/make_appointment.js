@@ -35,6 +35,42 @@ function Make_Appointment() {
     const [skipped, setSkipped] = useState(new Set());
     const [cw_offset, set_cw_offset] = useState(0);
     const [times, set_times] = useState([]);
+    const [is_open, set_is_open] = useState(false);
+    const [time_taken, set_time_taken] = useState(new Map());
+    const [appointments, set_appointments] = useState([]);
+
+    const [modal, set_modal] = useState({
+        title: "Fehler",
+        content:
+            "Bei der Bearbeitung ist etwas schiefgelaufen. Versuchen Sie es später erneut oder kontaktieren Sie uns hier: 3171023!",
+    });
+
+    const initial_values = {
+        issue: "",
+        mon: "",
+        tue: "",
+        wed: "",
+        thu: "",
+        fri: "",
+    };
+
+    const [form_values, set_from_values] = useState(initial_values);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        if (name && value) {
+            set_from_values({
+                ...form_values,
+                [name]: value,
+            });
+        } else {
+            const { name, value } = e.target.parentNode;
+            set_from_values({
+                ...form_values,
+                [name]: value,
+            });
+        }
+    };
 
     useEffect(() => {
         let tmp_times = [];
@@ -47,6 +83,8 @@ function Make_Appointment() {
                 .format("HH:mm");
         }
         set_times(tmp_times);
+
+        fetch_appointments(0);
     }, []);
 
     const isStepOptional = (step) => {
@@ -61,14 +99,14 @@ function Make_Appointment() {
     };
 
     const handleNext = () => {
-        if (formik.values.issue !== "") {
+        if (form_values.issue !== "") {
             if (
                 activeStep != 1 ||
-                formik.values.mon != "" ||
-                formik.values.tue != "" ||
-                formik.values.wed != "" ||
-                formik.values.thu != "" ||
-                formik.values.fri != ""
+                form_values.mon != "" ||
+                form_values.tue != "" ||
+                form_values.wed != "" ||
+                form_values.thu != "" ||
+                form_values.fri != ""
             ) {
                 let newSkipped = skipped;
                 if (isStepSkipped(activeStep)) {
@@ -80,20 +118,89 @@ function Make_Appointment() {
                 setSkipped(newSkipped);
             }
         }
-        if (activeStep === steps.length - 1) {
-            formik.submitForm();
-        }
     };
 
-    const cw_handle_next = () => {
+    async function fetch_appointments(offset) {
+        await axios
+            .get(
+                `${process.env.REACT_APP_BACKEND_HOST}/appointment?start_date=${
+                    cw(offset).mon
+                }&end_date=${cw(offset).sun}`
+            )
+            .then((res) => {
+                console.log(res.data[0]);
+                set_appointments(res.data[0]);
+                let tmp_map = new Map();
+                tmp_map.set("mon", new Map());
+                tmp_map.set("tue", new Map());
+                tmp_map.set("wed", new Map());
+                tmp_map.set("thu", new Map());
+                tmp_map.set("fri", new Map());
+                for (let i = 0; i < res.data[0].length; i++) {
+                    console.log(res.data[0][i]);
+                    let day = "";
+                    if (
+                        res.data[0][i].date ===
+                        moment(cw(offset).mon).format("YYYY-MM-DD")
+                    ) {
+                        day = "mon";
+                    }
+                    if (
+                        res.data[0][i].date ===
+                        moment(cw(offset).mon)
+                            .add(1, "days")
+                            .format("YYYY-MM-DD")
+                    ) {
+                        day = "tue";
+                    }
+                    if (
+                        res.data[0][i].date ===
+                        moment(cw(offset).mon)
+                            .add(2, "days")
+                            .format("YYYY-MM-DD")
+                    ) {
+                        day = "wed";
+                    }
+                    if (
+                        res.data[0][i].date ===
+                        moment(cw(offset).mon)
+                            .add(3, "days")
+                            .format("YYYY-MM-DD")
+                    ) {
+                        day = "thu";
+                    }
+                    if (
+                        res.data[0][i].date ===
+                        moment(cw(offset).mon)
+                            .add(4, "days")
+                            .format("YYYY-MM-DD")
+                    ) {
+                        day = "fri";
+                    }
+                    const split = res.data[0][i].time.split(":");
+                    console.log(split);
+                    const time = `${split[0]}:${split[1]}`;
+                    tmp_map.get(day).set(time, true);
+                }
+                set_time_taken(tmp_map);
+                console.log(tmp_map);
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            });
+    }
+
+    const cw_handle_next = async () => {
         if (cw_offset <= 6) {
             set_cw_offset((curr) => curr + 1);
+            await fetch_appointments(cw_offset + 1);
         }
     };
 
-    const cw_handle_back = () => {
+    const cw_handle_back = async () => {
         if (cw_offset > 0) {
             set_cw_offset((curr) => curr - 1);
+            await fetch_appointments(cw_offset - 1);
         }
     };
 
@@ -116,93 +223,16 @@ function Make_Appointment() {
     };
 
     const handleReset = () => {
-        formik.handleReset();
+        set_cw_offset(0);
+        set_from_values(initial_values);
+        fetch_appointments(0);
         setActiveStep(0);
     };
 
-    const handle_time_select = (event) => {
-        if (event.target.name === "mon") {
-            formik.values.mon = event.target.value;
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.parentNode.name === "mon") {
-            formik.values.mon = event.target.parentNode.value;
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.name === "tue") {
-            formik.values.tue = event.target.value;
-            formik.values.mon = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.parentNode.name === "tue") {
-            formik.values.tue = event.target.parentNode.value;
-            formik.values.mon = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.name === "wed") {
-            formik.values.wed = event.target.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.parentNode.name === "wed") {
-            formik.values.wed = event.target.parentNode.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.thu = "";
-            formik.values.fri = "";
-        }
-        if (event.target.name === "thu") {
-            formik.values.thu = event.target.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.fri = "";
-        }
-        if (event.target.parentNode.name === "thu") {
-            formik.values.thu = event.target.parentNode.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.fri = "";
-        }
-        if (event.target.name === "fri") {
-            formik.values.fri = event.target.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-        }
-        if (event.target.parentNode.name === "fri") {
-            formik.values.fri = event.target.parentNode.value;
-            formik.values.mon = "";
-            formik.values.tue = "";
-            formik.values.wed = "";
-            formik.values.thu = "";
-        }
-    };
-
-    const initial_values = {
-        issue: "",
-        mon: "",
-        tue: "",
-        wed: "",
-        thu: "",
-        fri: "",
-    };
-
-    const submit = (data) => {
+    const submit = async (event) => {
+        event.preventDefault();
+        handleNext();
+        const data = form_values;
         let date = "";
         let time = "";
         if (data.mon !== "") {
@@ -237,15 +267,26 @@ function Make_Appointment() {
         }
         let appointment = { date: date, time: time, issue: data.issue };
         console.log(appointment);
+        await axios
+            .post(
+                `${process.env.REACT_APP_BACKEND_HOST}/appointment`,
+                appointment
+            )
+            .then((res) => {
+                console.log(res.data);
+                set_modal({
+                    title: "Erfolg",
+                    content: "Die Termin reservierung war erfolgreich!",
+                });
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            });
+        set_is_open(true);
     };
 
-    const formik = useFormik({
-        initialValues: initial_values,
-        onSubmit: submit,
-    });
-
     const issue_info = () => {
-        if (formik.values.issue === "An- und Ummelden") {
+        if (form_values.issue === "An- und Ummelden") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -258,7 +299,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (formik.values.issue === "Beantragung Ausweisdokumente") {
+        if (form_values.issue === "Beantragung Ausweisdokumente") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     Beantragung Ausweisdokumente Informationen:
@@ -297,7 +338,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (formik.values.issue === "Beglaubiegungen") {
+        if (form_values.issue === "Beglaubiegungen") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -311,7 +352,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (formik.values.issue === "Fischereischein") {
+        if (form_values.issue === "Fischereischein") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -324,7 +365,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (formik.values.issue === "Ausländer-Angelegenheiten") {
+        if (form_values.issue === "Ausländer-Angelegenheiten") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -336,7 +377,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (formik.values.issue === "Führerscheinangelegenheiten") {
+        if (form_values.issue === "Führerscheinangelegenheiten") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -373,15 +414,8 @@ function Make_Appointment() {
                         <Select
                             variant="standard"
                             name="issue"
-                            value={formik.values.issue}
-                            onChange={formik.handleChange}
-                            error={
-                                formik.touched.issue &&
-                                Boolean(formik.errors.issue)
-                            }
-                            helpertext={
-                                formik.touched.issue && formik.errors.issue
-                            }
+                            value={form_values.issue}
+                            onChange={handleInputChange}
                         >
                             <MenuItem value={"Beantragung Ausweisdokumente"}>
                                 Beantragung Ausweisdokumente
@@ -440,7 +474,7 @@ function Make_Appointment() {
                         onClick={cw_handle_back}
                         sx={{ mr: 1 }}
                     >
-                        Zurück
+                        {`KW ${cw(cw_offset - 1).week}`}
                     </Button>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Box
@@ -465,7 +499,7 @@ function Make_Appointment() {
                     </Box>
                     <Box sx={{ flex: "1 1 auto" }} />
                     <Button onClick={cw_handle_next} disabled={cw_offset === 6}>
-                        Weiter
+                        {`KW ${cw(cw_offset + 1).week}`}
                     </Button>
                 </Box>
 
@@ -478,12 +512,21 @@ function Make_Appointment() {
                                     <Button
                                         variant="contained"
                                         sx={{
+                                            m: "1px",
                                             width: "20px",
                                             height: "20px",
+                                            bgcolor: time_taken
+                                                .get("mon")
+                                                .get(time)
+                                                ? "lightgray"
+                                                : "theme.primary",
                                         }}
-                                        name={"mon"}
+                                        name="mon"
                                         value={time}
-                                        onClick={handle_time_select}
+                                        onClick={handleInputChange}
+                                        disabled={time_taken
+                                            .get("mon")
+                                            .get(time)}
                                     >
                                         <Typography
                                             key={time}
@@ -505,12 +548,21 @@ function Make_Appointment() {
                                     <Button
                                         variant="contained"
                                         sx={{
+                                            m: "1px",
                                             width: "20px",
                                             height: "20px",
+                                            bgcolor: time_taken
+                                                .get("tue")
+                                                .get(time)
+                                                ? "lightgray"
+                                                : "theme.primary",
                                         }}
-                                        name={"tue"}
+                                        name="tue"
                                         value={time}
-                                        onClick={handle_time_select}
+                                        onClick={handleInputChange}
+                                        disabled={time_taken
+                                            .get("tue")
+                                            .get(time)}
                                     >
                                         <Typography
                                             key={time}
@@ -532,12 +584,21 @@ function Make_Appointment() {
                                     <Button
                                         variant="contained"
                                         sx={{
+                                            m: "1px",
                                             width: "20px",
                                             height: "20px",
+                                            bgcolor: time_taken
+                                                .get("wed")
+                                                .get(time)
+                                                ? "lightgray"
+                                                : "theme.primary",
                                         }}
-                                        name={"wed"}
+                                        name="wed"
                                         value={time}
-                                        onClick={handle_time_select}
+                                        onClick={handleInputChange}
+                                        disabled={time_taken
+                                            .get("wed")
+                                            .get(time)}
                                     >
                                         <Typography
                                             key={time}
@@ -559,12 +620,21 @@ function Make_Appointment() {
                                     <Button
                                         variant="contained"
                                         sx={{
+                                            m: "1px",
                                             width: "20px",
                                             height: "20px",
+                                            bgcolor: time_taken
+                                                .get("thu")
+                                                .get(time)
+                                                ? "lightgray"
+                                                : "theme.primary",
                                         }}
-                                        name={"thu"}
+                                        name="thu"
                                         value={time}
-                                        onClick={handle_time_select}
+                                        onClick={handleInputChange}
+                                        disabled={time_taken
+                                            .get("thu")
+                                            .get(time)}
                                     >
                                         <Typography
                                             key={time}
@@ -586,12 +656,21 @@ function Make_Appointment() {
                                     <Button
                                         variant="contained"
                                         sx={{
+                                            m: "1px",
                                             width: "20px",
                                             height: "20px",
+                                            bgcolor: time_taken
+                                                .get("fri")
+                                                .get(time)
+                                                ? "lightgray"
+                                                : "theme.primary",
                                         }}
-                                        name={"fri"}
+                                        name="fri"
                                         value={time}
-                                        onClick={handle_time_select}
+                                        onClick={handleInputChange}
+                                        disabled={time_taken
+                                            .get("fri")
+                                            .get(time)}
                                     >
                                         <Typography
                                             key={time}
@@ -622,6 +701,13 @@ function Make_Appointment() {
     return (
         <>
             <Box sx={{ width: "100%", my: 5 }}>
+                {is_open && (
+                    <AlertModal
+                        title={modal.title}
+                        content={modal.content}
+                        open={true}
+                    />
+                )}
                 <Typography variant="h2" align="center" gutterBottom>
                     Termin Reservieren
                 </Typography>
@@ -639,89 +725,98 @@ function Make_Appointment() {
                     sx={{ my: 5 }}
                 >
                     <Grid item xs={1} width="66%">
-                        <Stepper activeStep={activeStep}>
-                            {steps.map((label, index) => {
-                                const stepProps = {};
-                                const labelProps = {};
-                                if (isStepOptional(index)) {
-                                    labelProps.optional = (
-                                        <Typography variant="caption">
-                                            Optional
-                                        </Typography>
+                        <form onSubmit={submit}>
+                            <Stepper activeStep={activeStep}>
+                                {steps.map((label, index) => {
+                                    const stepProps = {};
+                                    const labelProps = {};
+                                    if (isStepOptional(index)) {
+                                        labelProps.optional = (
+                                            <Typography
+                                                key={label}
+                                                variant="caption"
+                                            >
+                                                Optional
+                                            </Typography>
+                                        );
+                                    }
+                                    if (isStepSkipped(index)) {
+                                        stepProps.completed = false;
+                                    }
+                                    return (
+                                        <Step key={label} {...stepProps}>
+                                            <StepLabel
+                                                key={label}
+                                                {...labelProps}
+                                            >
+                                                {label}
+                                            </StepLabel>
+                                        </Step>
                                     );
-                                }
-                                if (isStepSkipped(index)) {
-                                    stepProps.completed = false;
-                                }
-                                return (
-                                    <Step key={label} {...stepProps}>
-                                        <StepLabel {...labelProps}>
-                                            {label}
-                                        </StepLabel>
-                                    </Step>
-                                );
-                            })}
-                        </Stepper>
-                        {activeStep === steps.length ? (
-                            <React.Fragment>
-                                <Typography sx={{ mt: 2, mb: 1 }}>
-                                    Alles Fertig! <br />
-                                    Eine E-Mail mit den wichtigsten Infos wird
-                                    ihnen auch zugesendet.
-                                </Typography>
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        pt: 2,
-                                    }}
-                                >
-                                    <Box sx={{ flex: "1 1 auto" }} />
-                                    <Button onClick={handleReset}>
-                                        Noch einen Termin reservieren
-                                    </Button>
-                                </Box>
-                            </React.Fragment>
-                        ) : (
-                            <React.Fragment>
-                                {step_content[activeStep]()}
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        pt: 2,
-                                    }}
-                                >
-                                    <Button
-                                        color="inherit"
-                                        disabled={activeStep === 0}
-                                        onClick={handleBack}
-                                        sx={{ mr: 1 }}
+                                })}
+                            </Stepper>
+                            {activeStep === steps.length ? (
+                                <React.Fragment>
+                                    <Typography sx={{ mt: 2, mb: 1 }}>
+                                        Alles Fertig! <br />
+                                        Eine E-Mail mit den wichtigsten Infos
+                                        wird ihnen auch zugesendet.
+                                    </Typography>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            pt: 2,
+                                        }}
                                     >
-                                        Zurück
-                                    </Button>
-                                    <Box sx={{ flex: "1 1 auto" }} />
-                                    {isStepOptional(activeStep) && (
+                                        <Box sx={{ flex: "1 1 auto" }} />
+                                        <Button onClick={handleReset}>
+                                            Noch einen Termin reservieren
+                                        </Button>
+                                    </Box>
+                                </React.Fragment>
+                            ) : (
+                                <React.Fragment>
+                                    {step_content[activeStep]()}
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "row",
+                                            pt: 2,
+                                        }}
+                                    >
                                         <Button
                                             color="inherit"
-                                            onClick={handleSkip}
+                                            disabled={activeStep === 0}
+                                            onClick={handleBack}
                                             sx={{ mr: 1 }}
                                         >
-                                            Überspringen
+                                            Zurück
                                         </Button>
-                                    )}
-                                    {activeStep === steps.length - 1 ? (
-                                        <Button onClick={handleNext}>
-                                            Fertig
-                                        </Button>
-                                    ) : (
-                                        <Button onClick={handleNext}>
-                                            Weiter
-                                        </Button>
-                                    )}
-                                </Box>
-                            </React.Fragment>
-                        )}
+                                        <Box sx={{ flex: "1 1 auto" }} />
+                                        {isStepOptional(activeStep) && (
+                                            <Button
+                                                color="inherit"
+                                                onClick={handleSkip}
+                                                sx={{ mr: 1 }}
+                                            >
+                                                Überspringen
+                                            </Button>
+                                        )}
+                                        {activeStep === steps.length - 1 && (
+                                            <Button type="submit">
+                                                Fertig
+                                            </Button>
+                                        )}
+                                        {activeStep !== steps.length - 1 && (
+                                            <Button onClick={handleNext}>
+                                                Weiter
+                                            </Button>
+                                        )}
+                                    </Box>
+                                </React.Fragment>
+                            )}
+                        </form>
                     </Grid>
                 </Grid>
             </Box>
