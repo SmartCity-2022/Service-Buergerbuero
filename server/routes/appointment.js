@@ -10,8 +10,6 @@ router.get("/", async (req, res) => {
     const email = req.query.email;
     const start_date = req.query.start_date;
     const end_date = req.query.end_date;
-    console.log(start_date);
-    console.log(end_date);
 
     let appointments;
     if (email) {
