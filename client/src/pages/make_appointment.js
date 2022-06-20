@@ -134,7 +134,10 @@ function Make_Appointment() {
             .get(
                 `${process.env.REACT_APP_BACKEND_HOST}/appointment?start_date=${
                     cw(offset).mon
-                }&end_date=${cw(offset).sun}`
+                }&end_date=${cw(offset).sun}`,
+                {
+                    withCredentials: true,
+                }
             )
             .then((res) => {
                 console.log(res.data[0]);
@@ -279,6 +282,9 @@ function Make_Appointment() {
         await axios
             .post(
                 `${process.env.REACT_APP_BACKEND_HOST}/appointment`,
+                {
+                    withCredentials: true,
+                },
                 appointment
             )
             .then((res) => {
