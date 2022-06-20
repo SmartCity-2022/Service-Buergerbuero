@@ -1,11 +1,17 @@
 const express = require("express");
 const router = express.Router();
 const db = require("../models");
+const sequelize = require("sequelize");
+const { auth } = require("../middlewares/auth");
 
 router.get("/", async (req, res) => {
     const id = req.query.id;
     const cid = req.query.cid;
     const email = req.query.email;
+    const start_date = req.query.start_date;
+    const end_date = req.query.end_date;
+    console.log(start_date);
+    console.log(end_date);
 
     let appointments;
     if (email) {
@@ -21,6 +27,10 @@ router.get("/", async (req, res) => {
         appointments = await db.appointment.findOne({
             where: { id: id },
         });
+    } else if (start_date && end_date) {
+        appointments = await db.sequelize.query(
+            `SELECT * FROM appointment WHERE date BETWEEN "${start_date}" AND "${end_date}"`
+        );
     } else {
         appointments = await db.appointment.findAll();
     }
@@ -31,16 +41,14 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
-    const { email, from, to } = req.body;
-    if (!email || !from || !to) {
+router.post("/", auth, async (req, res) => {
+    const { email } = req.user;
+    const { date, time, issue } = req.body;
+    if (!email || !date || !time || !issue) {
         res.status(404).send("something went wrong");
     } else {
         const citizen = await db.citizen.findOne({ where: { email: email } });
-        const a = await citizen.createAppointment({
-            from: from,
-            to: to,
-        });
+        const a = await citizen.createAppointment(req.body);
         if (!a) {
             res.status(404).send("something went wrong");
         } else {
