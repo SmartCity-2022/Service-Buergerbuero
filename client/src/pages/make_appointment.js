@@ -1,4 +1,10 @@
-import React, { createRef, useContext, useEffect, useState } from "react";
+import React, {
+    createRef,
+    useContext,
+    useEffect,
+    useState,
+    Redirect,
+} from "react";
 import {
     Button,
     Box,
@@ -31,6 +37,7 @@ const steps = ["Anliegen auswählen", "Termin wählen", "Bestätigen"];
 const optional = [];
 
 function Make_Appointment() {
+    const { authState } = useContext(AuthContext);
     const [activeStep, setActiveStep] = useState(0);
     const [skipped, setSkipped] = useState(new Set());
     const [cw_offset, set_cw_offset] = useState(0);
@@ -73,18 +80,20 @@ function Make_Appointment() {
     };
 
     useEffect(() => {
-        let tmp_times = [];
-        for (let i = 0; i < 40; i++) {
-            tmp_times[i] = moment()
-                .local("de")
-                .startOf("day")
-                .add(8, "hours")
-                .add(i * 15, "minutes")
-                .format("HH:mm");
-        }
-        set_times(tmp_times);
+        if (authState.status) {
+            let tmp_times = [];
+            for (let i = 0; i < 40; i++) {
+                tmp_times[i] = moment()
+                    .local("de")
+                    .startOf("day")
+                    .add(8, "hours")
+                    .add(i * 15, "minutes")
+                    .format("HH:mm");
+            }
+            set_times(tmp_times);
 
-        fetch_appointments(0);
+            fetch_appointments(0);
+        }
     }, []);
 
     const isStepOptional = (step) => {
@@ -698,130 +707,143 @@ function Make_Appointment() {
 
     const step_content = [step_1, step_2, step_3];
 
-    return (
-        <>
-            <Box sx={{ width: "100%", my: 5 }}>
-                {is_open && (
-                    <AlertModal
-                        title={modal.title}
-                        content={modal.content}
-                        open={true}
-                    />
-                )}
-                <Typography variant="h2" align="center" gutterBottom>
-                    Termin Reservieren
-                </Typography>
-                <Typography sx={{ mx: "5%" }} variant="h6" align="center">
-                    Hier können Sie einen Termin bei uns Reservieren, folgen Sie
-                    einfachen den Schritten unten.
-                </Typography>
-                <Divider />
-                <Grid
-                    container
-                    spacing={0}
-                    direction="column"
-                    alignItems="center"
-                    justifyContent="center"
-                    sx={{ my: 5 }}
-                >
-                    <Grid item xs={1} width="66%">
-                        <form onSubmit={submit}>
-                            <Stepper activeStep={activeStep}>
-                                {steps.map((label, index) => {
-                                    const stepProps = {};
-                                    const labelProps = {};
-                                    if (isStepOptional(index)) {
-                                        labelProps.optional = (
-                                            <Typography
-                                                key={label}
-                                                variant="caption"
-                                            >
-                                                Optional
-                                            </Typography>
+    if (!authState.status) {
+        return (
+            <>
+                <h1>
+                    Sie haben keinen Zugriff auf diese Seite bitte melden Sie
+                    sich zuerst an!
+                </h1>
+            </>
+        );
+    } else {
+        return (
+            <>
+                <Box sx={{ width: "100%", my: 5 }}>
+                    {is_open && (
+                        <AlertModal
+                            title={modal.title}
+                            content={modal.content}
+                            open={true}
+                        />
+                    )}
+                    <Typography variant="h2" align="center" gutterBottom>
+                        Termin Reservieren
+                    </Typography>
+                    <Typography sx={{ mx: "5%" }} variant="h6" align="center">
+                        Hier können Sie einen Termin bei uns Reservieren, folgen
+                        Sie einfachen den Schritten unten.
+                    </Typography>
+                    <Divider />
+                    <Grid
+                        container
+                        spacing={0}
+                        direction="column"
+                        alignItems="center"
+                        justifyContent="center"
+                        sx={{ my: 5 }}
+                    >
+                        <Grid item xs={1} width="66%">
+                            <form onSubmit={submit}>
+                                <Stepper activeStep={activeStep}>
+                                    {steps.map((label, index) => {
+                                        const stepProps = {};
+                                        const labelProps = {};
+                                        if (isStepOptional(index)) {
+                                            labelProps.optional = (
+                                                <Typography
+                                                    key={label}
+                                                    variant="caption"
+                                                >
+                                                    Optional
+                                                </Typography>
+                                            );
+                                        }
+                                        if (isStepSkipped(index)) {
+                                            stepProps.completed = false;
+                                        }
+                                        return (
+                                            <Step key={label} {...stepProps}>
+                                                <StepLabel
+                                                    key={label}
+                                                    {...labelProps}
+                                                >
+                                                    {label}
+                                                </StepLabel>
+                                            </Step>
                                         );
-                                    }
-                                    if (isStepSkipped(index)) {
-                                        stepProps.completed = false;
-                                    }
-                                    return (
-                                        <Step key={label} {...stepProps}>
-                                            <StepLabel
-                                                key={label}
-                                                {...labelProps}
-                                            >
-                                                {label}
-                                            </StepLabel>
-                                        </Step>
-                                    );
-                                })}
-                            </Stepper>
-                            {activeStep === steps.length ? (
-                                <React.Fragment>
-                                    <Typography sx={{ mt: 2, mb: 1 }}>
-                                        Alles Fertig! <br />
-                                        Eine E-Mail mit den wichtigsten Infos
-                                        wird ihnen auch zugesendet.
-                                    </Typography>
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            pt: 2,
-                                        }}
-                                    >
-                                        <Box sx={{ flex: "1 1 auto" }} />
-                                        <Button onClick={handleReset}>
-                                            Noch einen Termin reservieren
-                                        </Button>
-                                    </Box>
-                                </React.Fragment>
-                            ) : (
-                                <React.Fragment>
-                                    {step_content[activeStep]()}
-                                    <Box
-                                        sx={{
-                                            display: "flex",
-                                            flexDirection: "row",
-                                            pt: 2,
-                                        }}
-                                    >
-                                        <Button
-                                            color="inherit"
-                                            disabled={activeStep === 0}
-                                            onClick={handleBack}
-                                            sx={{ mr: 1 }}
+                                    })}
+                                </Stepper>
+                                {activeStep === steps.length ? (
+                                    <React.Fragment>
+                                        <Typography sx={{ mt: 2, mb: 1 }}>
+                                            Alles Fertig! <br />
+                                            Eine E-Mail mit den wichtigsten
+                                            Infos wird ihnen auch zugesendet.
+                                        </Typography>
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                pt: 2,
+                                            }}
                                         >
-                                            Zurück
-                                        </Button>
-                                        <Box sx={{ flex: "1 1 auto" }} />
-                                        {isStepOptional(activeStep) && (
+                                            <Box sx={{ flex: "1 1 auto" }} />
+                                            <Button onClick={handleReset}>
+                                                Noch einen Termin reservieren
+                                            </Button>
+                                        </Box>
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment>
+                                        {step_content[activeStep]()}
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                pt: 2,
+                                            }}
+                                        >
                                             <Button
                                                 color="inherit"
-                                                onClick={handleSkip}
+                                                disabled={activeStep === 0}
+                                                onClick={handleBack}
                                                 sx={{ mr: 1 }}
                                             >
-                                                Überspringen
+                                                Zurück
                                             </Button>
-                                        )}
-                                        {activeStep === steps.length - 1 && (
-                                            <Button type="submit">
-                                                Fertig
-                                            </Button>
-                                        )}
-                                        {activeStep !== steps.length - 1 && (
-                                            <Button onClick={handleNext}>
-                                                Weiter
-                                            </Button>
-                                        )}
-                                    </Box>
-                                </React.Fragment>
-                            )}
-                        </form>
+                                            <Box sx={{ flex: "1 1 auto" }} />
+                                            {isStepOptional(activeStep) && (
+                                                <Button
+                                                    color="inherit"
+                                                    onClick={handleSkip}
+                                                    sx={{ mr: 1 }}
+                                                >
+                                                    Überspringen
+                                                </Button>
+                                            )}
+                                            {activeStep ===
+                                                steps.length - 1 && (
+                                                <Button type="submit">
+                                                    Fertig
+                                                </Button>
+                                            )}
+                                            {activeStep !==
+                                                steps.length - 1 && (
+                                                <Button onClick={handleNext}>
+                                                    Weiter
+                                                </Button>
+                                            )}
+                                        </Box>
+                                    </React.Fragment>
+                                )}
+                            </form>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Box>
-        </>
-    );
+                </Box>
+            </>
+        );
+    }
 }
 
 export default Make_Appointment;
