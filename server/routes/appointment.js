@@ -39,6 +39,23 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/mine", auth, async (req, res) => {
+    try {
+        const email = req.user.email;
+
+        const appointments = await db.appointment.findAll({
+            where: { "$citizen.email$": email },
+            include: [{ model: db.citizen, as: db.citizen.tableName }],
+        });
+        if (appointments) {
+            return res.status(200).json(appointments);
+        }
+    } catch (e) {
+        console.error(e);
+    }
+    res.status(404).send("something went wrong");
+});
+
 router.post("/", auth, async (req, res) => {
     const { email } = req.user;
     const { date, time, issue } = req.body;
