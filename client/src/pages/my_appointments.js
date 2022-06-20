@@ -157,51 +157,46 @@ function My_Appointments() {
                         Hier finden Sie eine Auflistung all ihrer Termine
                     </Typography>
                     <Divider />
-                    <Box
-                        sx={{
-                            height: 600,
-                            width: "50%",
-                            m: "auto",
-                            my: "1%",
-                            border: 1,
-                            borderColor: "lightgray",
-                        }}
-                    >
-                        {appointments.map((appointment, index) => {
-                            return (
-                                <>
-                                    <Box>
-                                        <Card variant="outlined">
-                                            <CardContent>
-                                                <Typography
-                                                    variant="h5"
-                                                    component="div"
-                                                >
-                                                    {appointment.issue}
-                                                </Typography>
-                                                <Typography
-                                                    sx={{ mb: 1.5 }}
-                                                    color="text.secondary"
-                                                >
-                                                    {appointment.date}
-                                                </Typography>
-                                                <Typography variant="body2">
-                                                    {appointment.time.replace(
-                                                        /:00+$/,
-                                                        ""
-                                                    )}{" "}
-                                                    Uhr
-                                                </Typography>
-                                                <Divider sx={{ my: 1 }} />
 
-                                                {issue_info(appointment.issue)}
-                                            </CardContent>
-                                        </Card>
-                                    </Box>
-                                </>
-                            );
-                        })}
-                    </Box>
+                    {appointments.map((appointment, index) => {
+                        return (
+                            <>
+                                <Box
+                                    sx={{
+                                        width: "50%",
+                                        m: "auto",
+                                        my: "1%",
+                                    }}
+                                >
+                                    <Card variant="outlined">
+                                        <CardContent>
+                                            <Typography
+                                                variant="h5"
+                                                component="div"
+                                            >
+                                                {appointment.issue}
+                                            </Typography>
+                                            <Typography
+                                                sx={{ mb: 1.5 }}
+                                                color="text.secondary"
+                                            >
+                                                {appointment.date}
+                                            </Typography>
+                                            <Typography variant="body2">
+                                                {appointment.time.replace(
+                                                    /:00+$/,
+                                                    ""
+                                                )}{" "}
+                                                Uhr
+                                            </Typography>
+                                            <Divider sx={{ my: 1 }} />
+                                            {issue_info(appointment.issue)}
+                                        </CardContent>
+                                    </Card>
+                                </Box>
+                            </>
+                        );
+                    })}
                 </Box>
             </>
         );
