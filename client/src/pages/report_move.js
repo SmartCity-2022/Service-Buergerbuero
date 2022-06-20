@@ -67,7 +67,7 @@ function Report_move() {
                     set_initial_values(res.data);
                 })
                 .catch((err) => {
-                    console.err(err.response.data);
+                    console.log(err.response.data);
                     set_citizen({});
                 });
         }
