@@ -46,6 +46,7 @@ router.get("/mine", auth, async (req, res) => {
         const appointments = await db.appointment.findAll({
             where: { "$citizen.email$": email },
             include: [{ model: db.citizen, as: db.citizen.tableName }],
+            order: [["date", "ASC"]],
         });
         if (appointments) {
             return res.status(200).json(appointments);
