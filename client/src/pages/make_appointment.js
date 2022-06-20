@@ -45,6 +45,7 @@ function Make_Appointment() {
     const [is_open, set_is_open] = useState(false);
     const [time_taken, set_time_taken] = useState(new Map());
     const [appointments, set_appointments] = useState([]);
+    const [selected_time, set_selected_time] = useState({});
 
     const [modal, set_modal] = useState({
         title: "Fehler",
@@ -70,12 +71,14 @@ function Make_Appointment() {
                 ...form_values,
                 [name]: value,
             });
+            set_selected_time({ name, value });
         } else {
             const { name, value } = e.target.parentNode;
             set_from_values({
                 ...form_values,
                 [name]: value,
             });
+            set_selected_time({ name, value });
         }
     };
 
@@ -238,6 +241,7 @@ function Make_Appointment() {
         set_cw_offset(0);
         set_from_values(initial_values);
         fetch_appointments(0);
+        set_is_open(false);
         setActiveStep(0);
     };
 
@@ -282,10 +286,10 @@ function Make_Appointment() {
         await axios
             .post(
                 `${process.env.REACT_APP_BACKEND_HOST}/appointment`,
+                appointment,
                 {
                     withCredentials: true,
-                },
-                appointment
+                }
             )
             .then((res) => {
                 console.log(res.data);
@@ -534,6 +538,10 @@ function Make_Appointment() {
                                                 .get("mon")
                                                 .get(time)
                                                 ? "lightgray"
+                                                : selected_time.name ===
+                                                      "mon" &&
+                                                  selected_time.value == time
+                                                ? "lightseagreen"
                                                 : "theme.primary",
                                         }}
                                         name="mon"
@@ -570,6 +578,10 @@ function Make_Appointment() {
                                                 .get("tue")
                                                 .get(time)
                                                 ? "lightgray"
+                                                : selected_time.name ===
+                                                      "tue" &&
+                                                  selected_time.value == time
+                                                ? "lightseagreen"
                                                 : "theme.primary",
                                         }}
                                         name="tue"
@@ -606,6 +618,10 @@ function Make_Appointment() {
                                                 .get("wed")
                                                 .get(time)
                                                 ? "lightgray"
+                                                : selected_time.name ===
+                                                      "wed" &&
+                                                  selected_time.value == time
+                                                ? "lightseagreen"
                                                 : "theme.primary",
                                         }}
                                         name="wed"
@@ -642,6 +658,10 @@ function Make_Appointment() {
                                                 .get("thu")
                                                 .get(time)
                                                 ? "lightgray"
+                                                : selected_time.name ===
+                                                      "thu" &&
+                                                  selected_time.value == time
+                                                ? "lightseagreen"
                                                 : "theme.primary",
                                         }}
                                         name="thu"
@@ -678,6 +698,10 @@ function Make_Appointment() {
                                                 .get("fri")
                                                 .get(time)
                                                 ? "lightgray"
+                                                : selected_time.name ===
+                                                      "fri" &&
+                                                  selected_time.value == time
+                                                ? "lightseagreen"
                                                 : "theme.primary",
                                         }}
                                         name="fri"
@@ -730,7 +754,7 @@ function Make_Appointment() {
                         <AlertModal
                             title={modal.title}
                             content={modal.content}
-                            open={true}
+                            open={is_open}
                         />
                     )}
                     <Typography variant="h2" align="center" gutterBottom>
