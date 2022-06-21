@@ -698,9 +698,57 @@ function Make_Appointment() {
         );
     };
     const step_3 = () => {
+        const data = form_values;
+        let date = "";
+        let time = "";
+        if (data.mon !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(0, "days")
+                .format("YYYY-MM-DD");
+            time = data.mon;
+        }
+        if (data.tue !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(1, "days")
+                .format("YYYY-MM-DD");
+            time = data.tue;
+        }
+        if (data.wed !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(2, "days")
+                .format("YYYY-MM-DD");
+            time = data.wed;
+        }
+        if (data.thu !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(3, "days")
+                .format("YYYY-MM-DD");
+            time = data.thu;
+        }
+        if (data.fri !== "") {
+            date = moment(cw(cw_offset).mon)
+                .add(4, "days")
+                .format("YYYY-MM-DD");
+            time = data.fri;
+        }
+        let appointment = { date: date, time: time, issue: data.issue };
         return (
             <>
-                <h1>step 1 </h1>
+                <Typography sx={{ m: "1%" }} variant="h5" align="left">
+                    Zusammenfassung
+                    <Typography sx={{ m: "2%" }} align="left">
+                        Anliegen: {appointment.issue}
+                        <br />
+                        <br />
+                        Datum: {appointment.date}
+                        <br />
+                        <br />
+                        Uhrzeit: {appointment.time}
+                        <br />
+                        <br />
+                    </Typography>
+                    {issue_info()}
+                </Typography>
             </>
         );
     };
