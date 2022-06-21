@@ -111,87 +111,38 @@ function Bulk_Waste() {
         }
     }, [authState.status]);
 
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                flexWrap: "nowrap",
-                m: 5,
-                bgcolor: "background.paper",
-                borderRadius: 1,
-                justifyContent: "flex-start",
-            }}
-        >
-            {is_open && (
-                <AlertModal
-                    title={modal.title}
-                    content={modal.content}
-                    open={is_open}
-                />
-            )}
-            <Box sx={{ mx: "5em", width: "33%" }}>
-                <Typography sx={{}} variant="h3" align="left" gutterBottom>
-                    Sperrmüllanmeldung
-                </Typography>
-                <Typography
-                    sx={{
-                        wordWrap: "break-word",
-                        fontWeight: "bold",
-                        fontSize: 16,
-                    }}
-                    align="left"
-                    gutterBottom
-                >
-                    Informationen und Tipps
-                </Typography>
-                <Typography
-                    sx={{
-                        wordWrap: "break-word",
-                        fontSize: 13,
-                    }}
-                    align="left"
-                    gutterBottom
-                >
-                    Um unsere Umwelt zu schonen und die Ressourcen sinnvoll zu
-                    nutzen, können Sie Ihren Beitrag dazu leisten.
-                    <br />
-                    <br /> Richtiges Anmelden von Sperrmüll ermöglicht es die
-                    Sperrmülltouren zu optimieren und die Kosten für die Bürger
-                    transparent und gerecht zu gestalten.
-                    <br />
-                    <br /> Bitte geben Sie Schritt für Schritt alle bei Ihnen
-                    abzuholenden Sperrgüter (Altholz, Elektro, Sperrmüll) an.
-                    Nur angemeldeter und ausreichend mit Marken versehener
-                    Sperrmüll wird abgefahren.
-                    <br />
-                    <br />
-                    Bitte denken Sie daran, dass eine Markeneinheit
-                    gleichzusetzen ist mit „was 2 Mann problemlos tragen können“
-                    (max. 50 kg je nach Sperrigkeit). Unsere Fachkräfte sind
-                    körperliche Arbeit gewohnt, aber auch sie sind nur Menschen.
-                    <br />
-                    <br />
-                    Befestigen Sie bitte Ihre Marken gut und sichtbar am
-                    Sperrgut.
-                    <br />
-                    <br />
-                    Eine Bestätigung sowie eine Erinnerung zu Ihrer
-                    Sperrmüllanmeldung erhalten Sie nur noch per E-Mail. Auch
-                    hier entlasten wir unsere Umwelt, da wir auf den bisher
-                    üblichen Versand von Briefen verzichten.
-                    <br />
-                    <br />
-                    Wir danken Ihnen!
-                </Typography>
-            </Box>
-            <Divider
+    if (!authState.status) {
+        return (
+            <>
+                <h1>
+                    Sie haben keinen Zugriff auf diese Seite bitte melden Sie
+                    sich zuerst an!
+                </h1>
+            </>
+        );
+    } else {
+        return (
+            <Box
                 sx={{
-                    borderWidth: "1px",
-                    borderColor: "lightgray",
+                    display: "flex",
+                    flexWrap: "nowrap",
+                    m: 5,
+                    bgcolor: "background.paper",
+                    borderRadius: 1,
+                    justifyContent: "flex-start",
                 }}
-            />
-            <Box sx={{ my: "4%", mx: "5em" }}>
-                <form onSubmit={submit}>
+            >
+                {is_open && (
+                    <AlertModal
+                        title={modal.title}
+                        content={modal.content}
+                        open={is_open}
+                    />
+                )}
+                <Box sx={{ mx: "5em", width: "33%" }}>
+                    <Typography sx={{}} variant="h3" align="left" gutterBottom>
+                        Sperrmüllanmeldung
+                    </Typography>
                     <Typography
                         sx={{
                             wordWrap: "break-word",
@@ -201,90 +152,153 @@ function Bulk_Waste() {
                         align="left"
                         gutterBottom
                     >
-                        Abholadresse:
+                        Informationen und Tipps
                     </Typography>
-                    <TextField
-                        name="street"
-                        type="text"
-                        label="Straße"
-                        sx={{ m: "5px", mb: "15px" }}
-                        variant="standard"
-                        value={form_values.street}
-                        onChange={handleInputChange}
-                        reqired
-                    />
-                    <TextField
-                        name="building_number"
-                        type="number"
-                        label="Hausnummer"
-                        sx={{ m: "5px", mb: "15px" }}
-                        variant="standard"
-                        value={form_values.building_number}
-                        onChange={handleInputChange}
-                        reqired
-                    />
                     <Typography
                         sx={{
                             wordWrap: "break-word",
-                            fontWeight: "bold",
-                            fontSize: 16,
+                            fontSize: 13,
                         }}
                         align="left"
                         gutterBottom
                     >
-                        Ich melde an:
+                        Um unsere Umwelt zu schonen und die Ressourcen sinnvoll
+                        zu nutzen, können Sie Ihren Beitrag dazu leisten.
+                        <br />
+                        <br /> Richtiges Anmelden von Sperrmüll ermöglicht es
+                        die Sperrmülltouren zu optimieren und die Kosten für die
+                        Bürger transparent und gerecht zu gestalten.
+                        <br />
+                        <br /> Bitte geben Sie Schritt für Schritt alle bei
+                        Ihnen abzuholenden Sperrgüter (Altholz, Elektro,
+                        Sperrmüll) an. Nur angemeldeter und ausreichend mit
+                        Marken versehener Sperrmüll wird abgefahren.
+                        <br />
+                        <br />
+                        Bitte denken Sie daran, dass eine Markeneinheit
+                        gleichzusetzen ist mit „was 2 Mann problemlos tragen
+                        können“ (max. 50 kg je nach Sperrigkeit). Unsere
+                        Fachkräfte sind körperliche Arbeit gewohnt, aber auch
+                        sie sind nur Menschen.
+                        <br />
+                        <br />
+                        Befestigen Sie bitte Ihre Marken gut und sichtbar am
+                        Sperrgut.
+                        <br />
+                        <br />
+                        Eine Bestätigung sowie eine Erinnerung zu Ihrer
+                        Sperrmüllanmeldung erhalten Sie nur noch per E-Mail.
+                        Auch hier entlasten wir unsere Umwelt, da wir auf den
+                        bisher üblichen Versand von Briefen verzichten.
+                        <br />
+                        <br />
+                        Wir danken Ihnen!
                     </Typography>
-                    <FormControl
-                        sx={{ m: "5px", mb: "15px", minWidth: "100px" }}
-                    >
-                        <InputLabel>Sperrgut </InputLabel>
-                        <Select
-                            reqired
-                            variant="standard"
-                            name="type"
-                            value={form_values.type}
-                            onChange={handleInputChange}
+                </Box>
+                <Divider
+                    sx={{
+                        borderWidth: "1px",
+                        borderColor: "lightgray",
+                    }}
+                />
+                <Box sx={{ my: "4%", mx: "5em" }}>
+                    <form onSubmit={submit}>
+                        <Typography
+                            sx={{
+                                wordWrap: "break-word",
+                                fontWeight: "bold",
+                                fontSize: 16,
+                            }}
+                            align="left"
+                            gutterBottom
                         >
-                            <MenuItem value={"Sperrmüll"}>Sperrmüll</MenuItem>
-                            <MenuItem value={"Altholz"}>Altholz</MenuItem>
-                            <MenuItem value={"Elektro"}>Elektro</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <Typography
-                        sx={{
-                            wordWrap: "break-word",
-                            fontWeight: "bold",
-                            fontSize: 16,
-                        }}
-                        align="left"
-                        gutterBottom
-                    >
-                        Abholen ab dem:
-                    </Typography>
-                    <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <Box sx={{ mx: "5px", my: "15px" }}>
-                            <DesktopDatePicker
-                                label="Date desktop"
-                                inputFormat="dd/MM/yyyy"
-                                value={date}
-                                onChange={handle_date_change}
-                                renderInput={(params) => (
-                                    <TextField {...params} />
-                                )}
-                            />
-                        </Box>
-                    </LocalizationProvider>
-                    <Button
-                        sx={{ mx: "5px", mt: "15px" }}
-                        variant="contained"
-                        type="submit"
-                    >
-                        Anmelden
-                    </Button>
-                </form>
+                            Abholadresse:
+                        </Typography>
+                        <TextField
+                            name="street"
+                            type="text"
+                            label="Straße"
+                            sx={{ m: "5px", mb: "15px" }}
+                            variant="standard"
+                            value={form_values.street}
+                            onChange={handleInputChange}
+                            reqired
+                        />
+                        <TextField
+                            name="building_number"
+                            type="number"
+                            label="Hausnummer"
+                            sx={{ m: "5px", mb: "15px" }}
+                            variant="standard"
+                            value={form_values.building_number}
+                            onChange={handleInputChange}
+                            reqired
+                        />
+                        <Typography
+                            sx={{
+                                wordWrap: "break-word",
+                                fontWeight: "bold",
+                                fontSize: 16,
+                            }}
+                            align="left"
+                            gutterBottom
+                        >
+                            Ich melde an:
+                        </Typography>
+                        <FormControl
+                            sx={{ m: "5px", mb: "15px", minWidth: "100px" }}
+                        >
+                            <InputLabel>Sperrgut </InputLabel>
+                            <Select
+                                reqired
+                                variant="standard"
+                                name="type"
+                                value={form_values.type}
+                                onChange={handleInputChange}
+                            >
+                                <MenuItem value={"Sperrmüll"}>
+                                    Sperrmüll
+                                </MenuItem>
+                                <MenuItem value={"Altholz"}>Altholz</MenuItem>
+                                <MenuItem value={"Elektro"}>Elektro</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <Typography
+                            sx={{
+                                wordWrap: "break-word",
+                                fontWeight: "bold",
+                                fontSize: 16,
+                            }}
+                            align="left"
+                            gutterBottom
+                        >
+                            Abholen ab dem:
+                        </Typography>
+                        <LocalizationProvider dateAdapter={AdapterDateFns}>
+                            <Box sx={{ mx: "5px", my: "15px" }}>
+                                <DesktopDatePicker
+                                    label="Date desktop"
+                                    inputFormat="dd/MM/yyyy"
+                                    value={date}
+                                    onChange={handle_date_change}
+                                    renderInput={(params) => (
+                                        <TextField {...params} />
+                                    )}
+                                />
+                            </Box>
+                        </LocalizationProvider>
+                        <Button
+                            sx={{ mx: "5px", mt: "15px" }}
+                            variant="contained"
+                            type="submit"
+                        >
+                            Anmelden
+                        </Button>
+                    </form>
+                </Box>
             </Box>
-        </Box>
-    );
+        );
+    }
 }
 
 export default Bulk_Waste;
