@@ -16,7 +16,16 @@ router.get("/mock", async (req, res) => {
 });
 
 router.post("/bulk_waste", auth, async (req, res) => {
-    res.json("bulk_waste");
+    try {
+        rabbitmq.publish(
+            "service.buergerbuero.bulk_waste",
+            JSON.stringify(req.body)
+        );
+        res.status(200).json("success");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("something went wrong");
+    }
 });
 
 module.exports = router;

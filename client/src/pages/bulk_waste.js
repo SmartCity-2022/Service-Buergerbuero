@@ -25,8 +25,15 @@ import moment from "moment";
 
 function Bulk_Waste() {
     const { authState } = useContext(AuthContext);
+    const [submitted, set_submitted] = useState(false);
     const [citizen, set_citizen] = useState({});
     const [date, set_date] = useState(new Date());
+    const [is_open, set_is_open] = useState(false);
+    const [modal, set_modal] = useState({
+        title: "Fehler",
+        content:
+            "Bei der Bearbeitung ist etwas schiefgelaufen. Versuchen Sie es später erneut oder kontaktieren Sie uns hier: 3171023!",
+    });
 
     const handle_date_change = (newValue) => {
         set_date(newValue);
@@ -50,10 +57,35 @@ function Bulk_Waste() {
         }
     };
 
-    const submit = (event) => {
+    const submit = async (event) => {
         event.preventDefault();
+        set_is_open(false);
 
-        console.log(form_values);
+        const data = {
+            ...form_values,
+            date: moment(date).format("YYYY-MM-DD"),
+        };
+        console.log(data);
+        await axios
+            .post(
+                `${process.env.REACT_APP_BACKEND_HOST}/test/bulk_waste`,
+                data,
+                {
+                    withCredentials: true,
+                }
+            )
+            .then((res) => {
+                console.log(res.data);
+                set_modal({
+                    title: "Erfolg",
+                    content: "Die Anmeldung ihres Sperrmülls war erfolgreich!",
+                });
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            });
+
+        set_is_open(true);
     };
 
     useEffect(() => {
@@ -90,6 +122,13 @@ function Bulk_Waste() {
                 justifyContent: "flex-start",
             }}
         >
+            {is_open && (
+                <AlertModal
+                    title={modal.title}
+                    content={modal.content}
+                    open={is_open}
+                />
+            )}
             <Box sx={{ mx: "5em", width: "33%" }}>
                 <Typography sx={{}} variant="h3" align="left" gutterBottom>
                     Sperrmüllanmeldung
@@ -134,6 +173,15 @@ function Bulk_Waste() {
                     <br />
                     Befestigen Sie bitte Ihre Marken gut und sichtbar am
                     Sperrgut.
+                    <br />
+                    <br />
+                    Eine Bestätigung sowie eine Erinnerung zu Ihrer
+                    Sperrmüllanmeldung erhalten Sie nur noch per E-Mail. Auch
+                    hier entlasten wir unsere Umwelt, da wir auf den bisher
+                    üblichen Versand von Briefen verzichten.
+                    <br />
+                    <br />
+                    Wir danken Ihnen!
                 </Typography>
             </Box>
             <Divider
@@ -167,7 +215,7 @@ function Bulk_Waste() {
                     />
                     <TextField
                         name="building_number"
-                        type="text"
+                        type="number"
                         label="Hausnummer"
                         sx={{ m: "5px", mb: "15px" }}
                         variant="standard"
@@ -197,9 +245,9 @@ function Bulk_Waste() {
                             value={form_values.type}
                             onChange={handleInputChange}
                         >
+                            <MenuItem value={"Sperrmüll"}>Sperrmüll</MenuItem>
                             <MenuItem value={"Altholz"}>Altholz</MenuItem>
                             <MenuItem value={"Elektro"}>Elektro</MenuItem>
-                            <MenuItem value={"Sperrmüll"}>Sperrmüll</MenuItem>
                         </Select>
                     </FormControl>
                     <Typography
