@@ -15,7 +15,12 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 
-const pages = ["Fundsachen", "Umzug_melden", "Termin_Reservieren"];
+const pages = [
+    "Fundsachen",
+    "Umzug_melden",
+    "Termin_Reservieren",
+    "Sperrmuell",
+];
 const settings = ["Termine"];
 
 const Nav = () => {

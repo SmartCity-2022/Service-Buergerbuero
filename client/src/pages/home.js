@@ -24,7 +24,7 @@ function Home() {
 
     const on_click = async () => {
         axios
-            .get(`${process.env.REACT_APP_BACKEND_HOST}/test`, {
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/misc`, {
                 withCredentials: true,
             })
             .then((res) => {
@@ -37,7 +37,7 @@ function Home() {
 
     const on_click_mock = async () => {
         axios
-            .get(`${process.env.REACT_APP_BACKEND_HOST}/test/mock`)
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/misc/mock`)
             .then((res) => {
                 console.log(res.data);
                 window.location.reload(false);
