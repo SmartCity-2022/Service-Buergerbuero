@@ -94,7 +94,7 @@ function Make_Appointment() {
 
             fetch_appointments(0);
         }
-    }, []);
+    }, [authState.status]);
 
     const isStepOptional = (step) => {
         if (step in optional) {
