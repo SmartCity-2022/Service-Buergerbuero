@@ -13,6 +13,7 @@ import My_Appointments from "./pages/my_appointments";
 import Lost_and_found from "./pages/lost_and_found";
 import Report_move from "./pages/report_move";
 import Make_Appointment from "./pages/make_appointment";
+import Bulk_Waste from "./pages/bulk_waste";
 
 export const AuthContext = createContext();
 
@@ -80,6 +81,10 @@ function App() {
                                 <Route
                                     path="termine"
                                     element={<My_Appointments />}
+                                />
+                                <Route
+                                    path="sperrmuell"
+                                    element={<Bulk_Waste />}
                                 />
                                 <Route path="*" element={<Page_Error />} />
                             </Routes>

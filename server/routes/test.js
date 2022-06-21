@@ -15,4 +15,8 @@ router.get("/mock", async (req, res) => {
     res.send("mockdata created");
 });
 
+router.post("/bulk_waste", auth, async (req, res) => {
+    res.json("bulk_waste");
+});
+
 module.exports = router;
