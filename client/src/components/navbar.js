@@ -16,12 +16,12 @@ import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 
 const pages = [
-    "Fundsachen",
     "Umzug_melden",
     "Termin_Reservieren",
     "Sperrmuell",
+    "Fundsachen",
 ];
-const settings = ["Termine"];
+const settings = ["Meine Termine"];
 
 const Nav = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
