@@ -76,14 +76,30 @@ router.post("/", auth, async (req, res) => {
     }
 });
 
-router.delete("/", async (req, res) => {
-    const id = req.query.id;
-    const del = await db.appointment.destroy({ where: { id: id } });
-    if (!del) {
-        res.status(404).send("something went wrong");
-    } else {
-        res.status(202).send("success");
+router.delete("/", auth, async (req, res) => {
+    try {
+        const email = req.user.email;
+        const id = req.query.id;
+        const appointment = await db.appointment.findOne({
+            where: { "$citizen.email$": email, id: id },
+            include: [{ model: db.citizen, as: db.citizen.tableName }],
+            order: [
+                ["date", "ASC"],
+                ["time", "ASC"],
+            ],
+        });
+        if (appointment) {
+            const del = await db.appointment.destroy({
+                where: { id: id },
+            });
+            if (del) {
+                return res.status(202).send("success");
+            }
+        }
+    } catch (error) {
+        console.log(error);
     }
+    res.status(404).send("something went wrong");
 });
 
 module.exports = router;
