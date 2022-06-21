@@ -79,7 +79,7 @@ function App() {
                                     element={<Make_Appointment />}
                                 />
                                 <Route
-                                    path="termine"
+                                    path="meine_termine"
                                     element={<My_Appointments />}
                                 />
                                 <Route
