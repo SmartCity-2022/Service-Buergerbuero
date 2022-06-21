@@ -42,7 +42,7 @@ function App() {
 
     useEffect(() => {
         axios
-            .get(`${process.env.REACT_APP_BACKEND_HOST}/test`, {
+            .get(`${process.env.REACT_APP_BACKEND_HOST}/misc`, {
                 withCredentials: true,
             })
             .then((res) => {

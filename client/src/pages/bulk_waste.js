@@ -68,7 +68,7 @@ function Bulk_Waste() {
         console.log(data);
         await axios
             .post(
-                `${process.env.REACT_APP_BACKEND_HOST}/test/bulk_waste`,
+                `${process.env.REACT_APP_BACKEND_HOST}/misc/bulk_waste`,
                 data,
                 {
                     withCredentials: true,
