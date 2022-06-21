@@ -44,11 +44,11 @@ const auth = async (req, res, next) => {
                 const { accessToken } = response.data;
 
                 if (accessToken) {
-                    res.cookie("accessToken", accessToken, {
-                        domain: ".smartcity.w-mi.de",
-                    });
                     const { payload } = verify_jwt(accessToken);
                     if (payload) {
+                        res.cookie("accessToken", accessToken, {
+                            domain: ".smartcity.w-mi.de",
+                        });
                         req.user = payload;
                         return next();
                     }
