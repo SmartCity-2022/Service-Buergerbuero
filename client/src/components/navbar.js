@@ -11,13 +11,11 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
-import SettingsApplicationsIcon from "@mui/icons-material/SettingsApplications";
 import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 
-const pages = ["Fundsachen", "Umzug_melden"];
+const pages = ["Fundsachen", "Umzug_melden", "Termin_Reservieren"];
 const settings = ["Termine"];
 
 const Nav = () => {
@@ -101,6 +99,7 @@ const Nav = () => {
                         >
                             {pages.map((page) => (
                                 <Link
+                                    key={page}
                                     style={{
                                         textDecoration: "none",
                                         color: "black",
@@ -111,7 +110,10 @@ const Nav = () => {
                                         key={page}
                                         onClick={handleCloseNavMenu}
                                     >
-                                        <Typography textAlign="center">
+                                        <Typography
+                                            key={page}
+                                            textAlign="center"
+                                        >
                                             {page.replace("_", " ")}
                                         </Typography>
                                     </MenuItem>
@@ -145,6 +147,7 @@ const Nav = () => {
                     >
                         {pages.map((page) => (
                             <Link
+                                key={page}
                                 style={{
                                     textDecoration: "none",
                                     color: "white",
@@ -204,6 +207,7 @@ const Nav = () => {
                         >
                             {settings.map((setting) => (
                                 <Link
+                                    key={setting}
                                     style={{
                                         textDecoration: "none",
                                         color: "black",
@@ -214,7 +218,10 @@ const Nav = () => {
                                         key={setting}
                                         onClick={handleCloseUserMenu}
                                     >
-                                        <Typography textAlign="center">
+                                        <Typography
+                                            key={setting}
+                                            textAlign="center"
+                                        >
                                             {setting.replace("_", " ")}
                                         </Typography>
                                     </MenuItem>

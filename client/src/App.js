@@ -4,6 +4,7 @@ import { useEffect, useState, createContext } from "react";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import { Paper } from "@mui/material";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import cw from "./utils/date_helper";
 
 import Home from "./pages/home";
 import Page_Error from "./pages/page_error";
@@ -11,6 +12,7 @@ import Nav from "./components/navbar";
 import My_Appointments from "./pages/my_appointments";
 import Lost_and_found from "./pages/lost_and_found";
 import Report_move from "./pages/report_move";
+import Make_Appointment from "./pages/make_appointment";
 
 export const AuthContext = createContext();
 
@@ -70,6 +72,10 @@ function App() {
                                 <Route
                                     path="umzug_melden"
                                     element={<Report_move />}
+                                />
+                                <Route
+                                    path="termin_reservieren"
+                                    element={<Make_Appointment />}
                                 />
                                 <Route
                                     path="termine"
