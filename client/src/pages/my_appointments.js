@@ -8,6 +8,13 @@ import {
     FormControlLabel,
     Card,
     CardContent,
+    IconButton,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    Slide,
 } from "@mui/material";
 import Divider from "@mui/material/Divider";
 import Grid from "@mui/material/Grid";
@@ -16,10 +23,57 @@ import { useFormik } from "formik";
 import axios from "axios";
 import * as yup from "yup";
 import AlertModal from "../components/alert_modal";
+import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+});
 
 function My_Appointments() {
     const { authState } = useContext(AuthContext);
     const [appointments, set_appointments] = useState([]);
+    const [delete_appointment, set_delete_appointment] = useState(null);
+
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = (e) => {
+        let value = e.target.value;
+        if (!value && e.target.nearestViewportElement != null) {
+            value = e.target.nearestViewportElement.parentNode.value;
+        } else if (!value && e.target.parentNode != null) {
+            value = e.target.parentNode.value;
+        }
+        set_delete_appointment(appointments[value]);
+        setOpen(true);
+    };
+
+    const handle_no = () => {
+        set_delete_appointment(null);
+        setOpen(false);
+    };
+
+    const handle_yes = async () => {
+        console.log(delete_appointment);
+        await axios
+            .delete(
+                `${process.env.REACT_APP_BACKEND_HOST}/appointment?id=${delete_appointment.id}`,
+                {
+                    withCredentials: true,
+                }
+            )
+            .then((res) => {
+                console.log(res.data);
+                appointments.splice(
+                    appointments.indexOf(delete_appointment),
+                    1
+                );
+                set_appointments(appointments);
+            })
+            .catch((err) => {
+                console.log(err.response.data);
+            });
+        setOpen(false);
+    };
 
     useEffect(() => {
         if (authState.status) {
@@ -38,7 +92,7 @@ function My_Appointments() {
                     console.log(err.response.data);
                 });
         }
-    }, []);
+    }, [authState.status]);
 
     const issue_info = (issue) => {
         if (issue === "An- und Ummelden") {
@@ -150,6 +204,29 @@ function My_Appointments() {
         return (
             <>
                 <Box sx={{ width: "100%", my: 5 }}>
+                    <Dialog
+                        open={open}
+                        TransitionComponent={Transition}
+                        keepMounted
+                        onClose={handle_no}
+                        aria-describedby="alert-dialog-slide-description"
+                    >
+                        <DialogTitle>{"Termin stornieren"}</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-slide-description">
+                                Sind Sie sich sicher, dass Sie ihen Termin
+                                absagen möchten?
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button sx={{ color: "red" }} onClick={handle_yes}>
+                                Ja
+                            </Button>
+                            <Button sx={{ color: "green" }} onClick={handle_no}>
+                                Nein
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     <Typography variant="h2" align="center" gutterBottom>
                         Meine Termine
                     </Typography>
@@ -168,14 +245,41 @@ function My_Appointments() {
                                         my: "1%",
                                     }}
                                 >
-                                    <Card variant="outlined">
+                                    <Card
+                                        variant="outlined"
+                                        sx={{ boxShadow: 3, borderRadius: 5 }}
+                                    >
                                         <CardContent>
-                                            <Typography
-                                                variant="h5"
-                                                component="div"
+                                            <Box
+                                                sx={{
+                                                    display: "flex",
+                                                    flexDirection: "row",
+                                                }}
                                             >
-                                                {appointment.issue}
-                                            </Typography>
+                                                <Typography
+                                                    variant="h5"
+                                                    component="div"
+                                                >
+                                                    {appointment.issue}
+                                                </Typography>
+                                                <Box
+                                                    sx={{ flex: "1 1 auto" }}
+                                                />
+                                                <IconButton
+                                                    aria-label="Termin Absagen"
+                                                    size="medium"
+                                                    onClick={handleClickOpen}
+                                                    value={index}
+                                                >
+                                                    <DeleteTwoToneIcon
+                                                        sx={{
+                                                            ":hover": {
+                                                                color: "red",
+                                                            },
+                                                        }}
+                                                    />
+                                                </IconButton>
+                                            </Box>
                                             <Typography
                                                 sx={{ mb: 1.5 }}
                                                 color="text.secondary"
