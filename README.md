@@ -3,7 +3,7 @@
 
 __Microservice Buergerbuero__
 
-Dieser Microservice bietet Informationen und Dienstleistungen des Bürgerbüros zur Verfügung:  
+Dieser Microservice stellt Informationen und Dienstleistungen des Bürgerbüros zur Verfügung:  
 - Melden von Umzügen
 - Terminvereinbarung
 - Sperrmüll Anmeldung
