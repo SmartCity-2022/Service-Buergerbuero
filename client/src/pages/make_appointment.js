@@ -30,6 +30,7 @@ import axios from "axios";
 import * as yup from "yup";
 import AlertModal from "../components/alert_modal";
 import cw from "../utils/date_helper";
+import Access_Denied from "../components/access_denied";
 const moment = require("moment");
 
 const steps = ["Anliegen auswählen", "Termin wählen", "Bestätigen"];
@@ -771,7 +772,7 @@ function Make_Appointment() {
                         Anliegen: {appointment.issue}
                         <br />
                         <br />
-                        Datum: {appointment.date}
+                        Datum: {moment(appointment.date).format("DD/MM/YYYY")}
                         <br />
                         <br />
                         Uhrzeit: {appointment.time}
@@ -789,10 +790,7 @@ function Make_Appointment() {
     if (!authState.status) {
         return (
             <>
-                <h1>
-                    Sie haben keinen Zugriff auf diese Seite bitte melden Sie
-                    sich zuerst an!
-                </h1>
+                <Access_Denied />
             </>
         );
     } else {

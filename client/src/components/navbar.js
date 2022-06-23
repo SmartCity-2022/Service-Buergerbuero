@@ -21,7 +21,7 @@ const pages = [
     "Sperrmuell",
     "Fundsachen",
 ];
-const settings = ["Meine Termine"];
+const settings = ["Meine_Termine"];
 
 const Nav = () => {
     const [anchorElNav, setAnchorElNav] = React.useState(null);

@@ -24,6 +24,7 @@ import axios from "axios";
 import * as yup from "yup";
 import AlertModal from "../components/alert_modal";
 import DeleteTwoToneIcon from "@mui/icons-material/DeleteTwoTone";
+import Access_Denied from "../components/access_denied";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -194,10 +195,7 @@ function My_Appointments() {
     if (!authState.status) {
         return (
             <>
-                <h1>
-                    Sie haben keinen Zugriff auf diese Seite bitte melden Sie
-                    sich zuerst an!
-                </h1>
+                <Access_Denied />
             </>
         );
     } else {

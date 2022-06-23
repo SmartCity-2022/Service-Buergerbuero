@@ -15,39 +15,40 @@ import { Link } from "react-router-dom";
 import logo from "../assets/logo.png";
 import HomeIcon from "@mui/icons-material/Home";
 import Divider from "@mui/material/Divider";
-import HelpTwoToneIcon from "@mui/icons-material/HelpTwoTone";
+import DoDisturbOnTwoToneIcon from "@mui/icons-material/DoDisturbOnTwoTone";
 
-function Page_Error() {
+const Access_Denied = () => {
     return (
         <>
             <Box sx={{ width: "100%", my: 15 }}>
                 <Typography variant="h3" align="center">
-                    <HelpTwoToneIcon
+                    <DoDisturbOnTwoToneIcon
                         fontSize="large"
                         sx={{ color: "darkred", mx: 2 }}
                     />
-                    Nicht gefunden
-                    <HelpTwoToneIcon
+                    Zugriff verweigert!
+                    <DoDisturbOnTwoToneIcon
                         fontSize="large"
                         sx={{ color: "darkred", mx: 2 }}
                     />
                 </Typography>
                 <Divider variant="middle" sx={{ mx: 75, my: 2 }} />
                 <Typography variant="h5" align="center">
-                    Die angeforderte Seite existiert nicht oder die URL ist
-                    falsch!
+                    Sie haben keinen Zugriff auf diese Seite!
                 </Typography>
                 <Typography sx={{ my: 2 }} variant="h6" align="center">
-                    Vergewissern Sie sich, dass Sie die richtige URL eingegeben
-                    haben oder kehren Sie zur{" "}
-                    <a target="_self" href="/home" className="link">
-                        Hauptseite
+                    Um auf diese Seite zu gelangen, müssen Sie sich zuerst im{" "}
+                    <a
+                        target="_self"
+                        href="https://smartcity.w-mi.de/auth"
+                        className="link"
+                    >
+                        MainHub
                     </a>{" "}
-                    zurück.
+                    registriert und eingeloggt haben.
                 </Typography>
             </Box>
         </>
     );
-}
-
-export default Page_Error;
+};
+export default Access_Denied;

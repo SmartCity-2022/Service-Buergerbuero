@@ -3,6 +3,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Box, Typography, Divider } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
+const moment = require("moment");
 
 function Lost_and_found() {
     const [rows, set_rows] = useState([]);
@@ -25,7 +26,13 @@ function Lost_and_found() {
         axios
             .get(`${process.env.REACT_APP_BACKEND_HOST}/lost_property`)
             .then((res) => {
-                set_rows(res.data);
+                let data = res.data;
+                for (let i = 0; i < Object.keys(data).length; i++) {
+                    data[i].found_on = moment(data[i].found_on).format(
+                        "DD/MM/YYYY"
+                    );
+                }
+                set_rows(data);
             });
     }, []);
 
