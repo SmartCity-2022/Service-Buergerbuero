@@ -47,7 +47,7 @@ router.post("/", async (req, res) => {
     }
 });
 
-router.patch("/move/", async (req, res) => {
+router.patch("/move/", auth, async (req, res) => {
     const { email, street, building_number, type } = req.body;
     if (!email || !street || !building_number || !type) {
         res.status(404).send("something went wrong");
