@@ -22,6 +22,7 @@ import axios from "axios";
 import * as yup from "yup";
 import AlertModal from "../components/alert_modal";
 import moment from "moment";
+import Access_Denied from "../components/access_denied";
 
 function Bulk_Waste() {
     const { authState } = useContext(AuthContext);
@@ -114,10 +115,7 @@ function Bulk_Waste() {
     if (!authState.status) {
         return (
             <>
-                <h1>
-                    Sie haben keinen Zugriff auf diese Seite bitte melden Sie
-                    sich zuerst an!
-                </h1>
+                <Access_Denied />
             </>
         );
     } else {
