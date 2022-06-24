@@ -37,15 +37,8 @@ const Access_Denied = () => {
                     Sie haben keinen Zugriff auf diese Seite!
                 </Typography>
                 <Typography sx={{ my: 2 }} variant="h6" align="center">
-                    Um auf diese Seite zu gelangen, müssen Sie sich zuerst im{" "}
-                    <a
-                        target="_self"
-                        href="https://smartcity.w-mi.de/auth"
-                        className="link"
-                    >
-                        MainHub
-                    </a>{" "}
-                    registriert und eingeloggt haben.
+                    Um auf diese Seite zu gelangen, müssen Sie sich zuerst im
+                    MainHub registriert und eingeloggt haben.
                 </Typography>
             </Box>
         </>
