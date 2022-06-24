@@ -38,6 +38,13 @@ function App() {
                 contrastText: "#fff",
             },
         },
+        typography: {
+            fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+            fontSize: 14,
+            fontWeightLight: 300,
+            fontWeightRegular: 400,
+            fontWeightMedium: 500,
+        },
     });
 
     useEffect(() => {
@@ -85,6 +92,14 @@ function App() {
                                 <Route
                                     path="sperrmuell"
                                     element={<Bulk_Waste />}
+                                />
+                                <Route
+                                    path="/mainhub"
+                                    component={() => {
+                                        window.location.href =
+                                            "https://example.com/1234";
+                                        return null;
+                                    }}
                                 />
                                 <Route path="*" element={<Page_Error />} />
                             </Routes>
