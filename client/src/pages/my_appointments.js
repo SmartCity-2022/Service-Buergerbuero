@@ -144,7 +144,7 @@ function My_Appointments() {
                 </Typography>
             );
         }
-        if (issue === "Beglaubiegungen") {
+        if (issue === "Beglaubigungen") {
             return (
                 <Typography sx={{ m: "2%" }} align="left">
                     erforderliche Unterlagen / Gebühren:

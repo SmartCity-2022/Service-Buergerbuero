@@ -358,7 +358,7 @@ function Make_Appointment() {
                 </Typography>
             );
         }
-        if (form_values.issue === "Beglaubiegungen") {
+        if (form_values.issue === "Beglaubigungen") {
             return (
                 <Typography sx={{ m: "1%" }} variant="h5" align="left">
                     An- und Ummelden Informationen:
@@ -440,8 +440,8 @@ function Make_Appointment() {
                             <MenuItem value={"Beantragung Ausweisdokumente"}>
                                 Beantragung Ausweisdokumente
                             </MenuItem>
-                            <MenuItem value={"Beglaubiegungen"}>
-                                Beglaubiegungen
+                            <MenuItem value={"Beglaubigungen"}>
+                                Beglaubigungen
                             </MenuItem>
                             <MenuItem value={"An- und Ummelden"}>
                                 An- und Ummelden
